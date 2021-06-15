@@ -50,6 +50,8 @@ namespace Gambo.ECS
             registry.OnComponentRemoved -= OnComponentRemoved;
         }
 
+        public abstract void Dispatch();
+
         public override bool Equals(object? obj)
         {
             if (obj is EcsSystem other)

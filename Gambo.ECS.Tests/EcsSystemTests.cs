@@ -4,6 +4,10 @@ namespace Gambo.ECS.Tests
 {
     internal class DummySystem : EcsSystem
     {
+        public override void Dispatch()
+        {
+        }
+
         protected override void OnComponentAdded(object sender, ComponentEventArgs e)
         {
         }
@@ -20,7 +24,11 @@ namespace Gambo.ECS.Tests
         {
             Name = name;
         }
-        
+
+        public override void Dispatch()
+        {
+        }
+
         protected override void OnComponentAdded(object sender, ComponentEventArgs e)
         {
             
