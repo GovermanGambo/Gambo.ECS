@@ -3,6 +3,9 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>9</LangVersion>
+        <PackageVersion>0.1.0</PackageVersion>
+        <Title>Gambo.ECS</Title>
+        <Company>Gambo</Company>
     </PropertyGroup>
 
 </Project>
