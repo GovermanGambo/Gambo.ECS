@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gambo.ECS", "Gambo.ECS\Gambo.ECS.csproj", "{CEAE47BB-3E03-4A0C-AD86-787091A688B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gambo.ECS.Tests", "Gambo.ECS.Tests\Gambo.ECS.Tests.csproj", "{391EEF09-1398-4794-8FAD-FCE76E9C491A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CEAE47BB-3E03-4A0C-AD86-787091A688B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEAE47BB-3E03-4A0C-AD86-787091A688B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEAE47BB-3E03-4A0C-AD86-787091A688B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEAE47BB-3E03-4A0C-AD86-787091A688B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{391EEF09-1398-4794-8FAD-FCE76E9C491A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{391EEF09-1398-4794-8FAD-FCE76E9C491A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{391EEF09-1398-4794-8FAD-FCE76E9C491A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{391EEF09-1398-4794-8FAD-FCE76E9C491A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
