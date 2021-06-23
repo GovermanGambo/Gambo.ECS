@@ -77,7 +77,7 @@ namespace Gambo.ECS.Tests
             Assert.AreNotEqual(component, registry.GetComponent<TagComponent>(entity));
         }
 
-        private struct TestComponent
+        private class TestComponent
         {
             
         }
@@ -130,18 +130,18 @@ namespace Gambo.ECS.Tests
             Assert.Throws<ArgumentException>(() => registry.AddComponent<TestComponent>(entity));
         }
 
-        private struct TagComponent
+        private class TagComponent
         {
             public string Tag { get; }
+
+            public TagComponent()
+            {
+                
+            }
 
             public TagComponent(string tag)
             {
                 Tag = tag;
-            }
-
-            public TagComponent(TagComponent tagComponent)
-            {
-                Tag = tagComponent.Tag;
             }
         }
         
@@ -159,11 +159,11 @@ namespace Gambo.ECS.Tests
         public void ComponentShouldBeAddedWithArguments2()
         {
             var entity = registry.CreateEntity();
-            var tag = new TagComponent();
-            var component = registry.AddComponent<TagComponent>(entity, tag);
+            var tag = new TagComponent("Test");
+            var component = registry.AddComponent<TagComponent>(entity, tag.Tag);
             
             Assert.NotNull(component);
-            Assert.AreEqual(tag, component);
+            Assert.AreEqual(tag.Tag, component.Tag);
         }
 
         [Test]

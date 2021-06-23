@@ -75,7 +75,7 @@ namespace Gambo.ECS
             return removed;
         }
 
-        public T AddComponent<T>(EcsEntity entity, params object[] args) where T : struct
+        public T AddComponent<T>(EcsEntity entity, params object[] args) where T : class
         {
             AssertEntity(entity);
             
@@ -103,7 +103,7 @@ namespace Gambo.ECS
             return component;
         }
 
-        public void RemoveComponent<T>(EcsEntity entity) where T : struct
+        public void RemoveComponent<T>(EcsEntity entity) where T : class
         {
             if (!components.ContainsKey(entity)) return;
             
@@ -127,7 +127,7 @@ namespace Gambo.ECS
             return components.ContainsKey(entity) ? components[entity] : new HashSet<object>();
         }
 
-        public IEnumerable<TComponent> GetComponentsOfType<TComponent>() where TComponent : struct
+        public IEnumerable<TComponent> GetComponentsOfType<TComponent>() where TComponent : class
         {
             var componentsByType = this.components
                 .Values
@@ -138,7 +138,7 @@ namespace Gambo.ECS
             return componentsByType;
         }
 
-        public T GetComponent<T>(EcsEntity entity) where T : struct
+        public T GetComponent<T>(EcsEntity entity) where T : class
         {
             AssertEntity(entity);
 
