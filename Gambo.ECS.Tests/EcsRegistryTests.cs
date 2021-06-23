@@ -210,6 +210,73 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual("TagB", components.ElementAt(1).Tag);
         }
 
+        [Test]
+        public void GetComponentShouldReturnNullIfDoesntExist()
+        {
+            var entity = registry.CreateEntity();
+            var component = registry.GetComponent<TestComponent>(entity);
+            
+            Assert.Null(component);
+        }
+
+        [Test]
+        public void ViewShouldReturn2ViewsWith2Components()
+        {
+            var entityA = registry.CreateEntity();
+            var entityB = registry.CreateEntity();
+            var testComponentA = registry.AddComponent<TestComponent>(entityA);
+            var tagComponentA = registry.AddComponent<TagComponent>(entityA, "TagA");
+            var testComponentB = registry.AddComponent<TestComponent>(entityB);
+            var tagComponentB = registry.AddComponent<TagComponent>(entityB, "TagB");
+
+            var view = registry.View(typeof(TestComponent), typeof(TagComponent));
+            Assert.AreEqual(2, view.Length);
+            Assert.AreEqual(testComponentA, view[0].Get<TestComponent>());
+            Assert.AreEqual(testComponentB, view[1].Get<TestComponent>());
+            Assert.AreEqual(tagComponentA, view[0].Get<TagComponent>());
+            Assert.AreEqual(tagComponentB, view[1].Get<TagComponent>());
+        }
+        
+        [Test]
+        public void ViewShouldReturn1ViewWith2Components()
+        {
+            var entityA = registry.CreateEntity();
+            var entityB = registry.CreateEntity();
+            registry.AddComponent<TagComponent>(entityA, "TagA");
+            var testComponentB = registry.AddComponent<TestComponent>(entityB);
+            var tagComponentB = registry.AddComponent<TagComponent>(entityB, "TagB");
+
+            var view = registry.View(typeof(TestComponent), typeof(TagComponent));
+            Assert.AreEqual(1, view.Length);
+            Assert.AreEqual(testComponentB, view[0].Get<TestComponent>());
+            Assert.AreEqual(tagComponentB, view[0].Get<TagComponent>());
+        }
+        
+        [Test]
+        public void ViewGetShouldReturnNullIfNotExists()
+        {
+            var entityA = registry.CreateEntity();
+            var entityB = registry.CreateEntity();
+            registry.AddComponent<TagComponent>(entityA, "TagA");
+
+            var view = registry.View(typeof(TagComponent));
+            Assert.AreEqual(1, view.Length);
+            Assert.NotNull(view[0].Get<TagComponent>());
+            Assert.Null(view[0].Get<TestComponent>());
+        }
+        
+        [Test]
+        public void ViewShouldReturnNoViews()
+        {
+            var entityA = registry.CreateEntity();
+            var entityB = registry.CreateEntity();
+            registry.AddComponent<TagComponent>(entityA, "TagA");
+            registry.AddComponent<TagComponent>(entityB, "TagB");
+
+            var view = registry.View(typeof(TestComponent), typeof(TagComponent));
+            Assert.AreEqual(0, view.Length);
+        }
+
         private EcsRegistry registry;
     }
 }
