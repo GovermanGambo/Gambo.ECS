@@ -6,6 +6,12 @@
         <PackageVersion>0.1.0</PackageVersion>
         <Title>Gambo.ECS</Title>
         <Company>Gambo</Company>
+        <Authors>GovermanGambo</Authors>
+        <Copyright>GovermanGambo 2021</Copyright>
+        <PackageProjectUrl>https://github.com/GovermanGambo/Gambo.ECS</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/GovermanGambo/Gambo.ECS/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/GovermanGambo/Gambo.ECS</RepositoryUrl>
+        <Nullable>disable</Nullable>
     </PropertyGroup>
 
 </Project>
