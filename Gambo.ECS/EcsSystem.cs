@@ -50,8 +50,6 @@ namespace Gambo.ECS
             registry.OnComponentRemoved -= OnComponentRemoved;
         }
 
-        public abstract void Dispatch();
-
         public override bool Equals(object? obj)
         {
             if (obj is EcsSystem other)
@@ -97,7 +95,7 @@ namespace Gambo.ECS
             
         }
 
-        private bool enabled;
+        private bool enabled = true;
         private EcsRegistry registry;
         
         private void OnEnableBase()

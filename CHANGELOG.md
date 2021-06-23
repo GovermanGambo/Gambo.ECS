@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.2.1
+ - Removed abstract 'Dispatch' method on 'EcsSystem'
+ - Set Systems to be enabled by default
+
 ### Version 0.2.0
  - Added views for retrieving component collections per entity
 
