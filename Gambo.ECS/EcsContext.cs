@@ -7,8 +7,7 @@ namespace Gambo.ECS
 {
     public class EcsContext
     {
-        public EcsRegistry Registry { get; }
-        public ReadOnlyCollection<EcsSystem> Systems => new(systems.ToList());
+        private readonly HashSet<EcsSystem> systems;
 
         public EcsContext()
         {
@@ -16,14 +15,15 @@ namespace Gambo.ECS
             systems = new HashSet<EcsSystem>();
         }
 
+        public EcsRegistry Registry { get; }
+        public ReadOnlyCollection<EcsSystem> Systems => new(systems.ToList());
+
         public TSystem AddSystem<TSystem>(params object[] args) where TSystem : EcsSystem
         {
             var system = (TSystem) Activator.CreateInstance(typeof(TSystem), args);
             if (system == null)
-            {
                 throw new ArgumentException($"No suitable constructor was found for system type {typeof(TSystem)}");
-            }
-            
+
             system.Registry = Registry;
             system.Enabled = true;
             systems.Add(system);
@@ -34,9 +34,9 @@ namespace Gambo.ECS
         public bool RemoveSystem<TSystem>() where TSystem : EcsSystem
         {
             var system = systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
-            
+
             if (system == null) return false;
-            
+
             system.Enabled = false;
             return systems.Remove(system);
         }
@@ -47,7 +47,5 @@ namespace Gambo.ECS
 
             return system as TSystem;
         }
-
-        private readonly HashSet<EcsSystem> systems;
     }
 }

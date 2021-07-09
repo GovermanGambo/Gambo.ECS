@@ -6,12 +6,14 @@ namespace Gambo.ECS.Tests
 {
     public class EcsRegistryTests
     {
+        private EcsRegistry registry;
+
         [SetUp]
         public void Setup()
         {
             registry = new EcsRegistry();
         }
-        
+
         [Test]
         public void EntityShouldBeAdded()
         {
@@ -29,7 +31,7 @@ namespace Gambo.ECS.Tests
             registry.RemoveEntity(entityA);
 
             var removedEntity = registry.GetEntity(entityA.ID);
-            
+
             Assert.AreEqual(0, registry.EntitiesCount);
             Assert.IsNull(removedEntity);
             Assert.Throws<ArgumentException>(() => registry.GetComponent<TestComponent>(entityA));
@@ -39,7 +41,7 @@ namespace Gambo.ECS.Tests
         public void EntityShouldNotBeAddedIfAlreadyAdded()
         {
             var entity = registry.CreateEntity();
-            bool added = registry.AddEntity(entity);
+            var added = registry.AddEntity(entity);
             Assert.False(added);
         }
 
@@ -48,8 +50,8 @@ namespace Gambo.ECS.Tests
         {
             var entity = registry.CreateEntity();
             registry.RemoveEntity(entity);
-            bool added = registry.AddEntity(entity);
-            
+            var added = registry.AddEntity(entity);
+
             Assert.True(added);
         }
 
@@ -60,7 +62,7 @@ namespace Gambo.ECS.Tests
             registry.AddComponent<TagComponent>(entity, "MyTag");
             registry.RemoveEntity(entity);
             registry.AddEntity(entity);
-            
+
             Assert.AreEqual(1, registry.GetComponents(entity).Count);
             Assert.AreEqual("MyTag", registry.GetComponent<TagComponent>(entity).Tag);
         }
@@ -72,14 +74,9 @@ namespace Gambo.ECS.Tests
             var component = registry.AddComponent<TagComponent>(entity, "MyTag");
             registry.RemoveEntity(entity, true);
             registry.AddEntity(entity);
-            
+
             Assert.IsEmpty(registry.GetComponents(entity));
             Assert.AreNotEqual(component, registry.GetComponent<TagComponent>(entity));
-        }
-
-        private class TestComponent
-        {
-            
         }
 
         [Test]
@@ -95,7 +92,7 @@ namespace Gambo.ECS.Tests
         {
             var entity = registry.CreateEntity();
             var component = registry.AddComponent<TestComponent>(entity);
-            
+
             Assert.NotNull(component);
             Assert.AreEqual(1, registry.GetComponents(entity).Count);
             Assert.AreEqual(component, registry.GetComponent<TestComponent>(entity));
@@ -107,10 +104,10 @@ namespace Gambo.ECS.Tests
             var entity = registry.CreateEntity();
             var component = registry.AddComponent<TestComponent>(entity);
             registry.RemoveComponent<TestComponent>(entity);
-            
+
             Assert.AreEqual(0, registry.GetComponents(entity).Count);
         }
-        
+
         [Test]
         public void ComponentShouldBeRemovedIfComponentDontExists()
         {
@@ -118,7 +115,7 @@ namespace Gambo.ECS.Tests
             var component = registry.AddComponent<TestComponent>(entity);
             registry.RemoveComponent<TestComponent>(entity);
             registry.RemoveComponent<TestComponent>(entity);
-            
+
             Assert.AreEqual(0, registry.GetComponents(entity).Count);
         }
 
@@ -130,38 +127,23 @@ namespace Gambo.ECS.Tests
             Assert.Throws<ArgumentException>(() => registry.AddComponent<TestComponent>(entity));
         }
 
-        private class TagComponent
-        {
-            public string Tag { get; }
-
-            public TagComponent()
-            {
-                
-            }
-
-            public TagComponent(string tag)
-            {
-                Tag = tag;
-            }
-        }
-        
         [Test]
         public void ComponentShouldBeAddedWithArguments()
         {
             var entity = registry.CreateEntity();
             var component = registry.AddComponent<TagComponent>(entity, "MyTag");
-            
+
             Assert.NotNull(component);
             Assert.AreEqual("MyTag", component.Tag);
         }
-        
+
         [Test]
         public void ComponentShouldBeAddedWithArguments2()
         {
             var entity = registry.CreateEntity();
             var tag = new TagComponent("Test");
             var component = registry.AddComponent<TagComponent>(entity, tag.Tag);
-            
+
             Assert.NotNull(component);
             Assert.AreEqual(tag.Tag, component.Tag);
         }
@@ -173,7 +155,7 @@ namespace Gambo.ECS.Tests
             var entityB = registry.CreateEntity();
             var componentA = registry.AddComponent<TagComponent>(entityA, "EntityA");
             var componentB = registry.AddComponent<TagComponent>(entityB, "EntityB");
-            
+
             Assert.AreEqual(1, registry.GetComponents(entityA).Count);
             Assert.AreEqual(1, registry.GetComponents(entityB).Count);
             Assert.AreNotEqual(componentA.Tag, componentB.Tag);
@@ -187,7 +169,7 @@ namespace Gambo.ECS.Tests
             var componentA = registry.AddComponent<TagComponent>(entityA, "EntityA");
             var componentB = registry.AddComponent<TagComponent>(entityB, "EntityB");
             registry.RemoveComponent<TagComponent>(entityA);
-            
+
             Assert.AreEqual(0, registry.GetComponents(entityA).Count);
             Assert.AreEqual(1, registry.GetComponents(entityB).Count);
             Assert.AreEqual(componentB, registry.GetComponent<TagComponent>(entityB));
@@ -204,7 +186,7 @@ namespace Gambo.ECS.Tests
             registry.AddComponent<TagComponent>(entityB, "TagB");
 
             var components = registry.GetComponentsOfType<TagComponent>();
-            
+
             Assert.AreEqual(2, components.Count());
             Assert.AreEqual("TagA", components.ElementAt(0).Tag);
             Assert.AreEqual("TagB", components.ElementAt(1).Tag);
@@ -215,7 +197,7 @@ namespace Gambo.ECS.Tests
         {
             var entity = registry.CreateEntity();
             var component = registry.GetComponent<TestComponent>(entity);
-            
+
             Assert.Null(component);
         }
 
@@ -236,7 +218,7 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual(tagComponentA, view[0].Get<TagComponent>());
             Assert.AreEqual(tagComponentB, view[1].Get<TagComponent>());
         }
-        
+
         [Test]
         public void ViewShouldReturn1ViewWith2Components()
         {
@@ -251,7 +233,7 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual(testComponentB, view[0].Get<TestComponent>());
             Assert.AreEqual(tagComponentB, view[0].Get<TagComponent>());
         }
-        
+
         [Test]
         public void ViewGetShouldReturnNullIfNotExists()
         {
@@ -264,7 +246,7 @@ namespace Gambo.ECS.Tests
             Assert.NotNull(view[0].Get<TagComponent>());
             Assert.Null(view[0].Get<TestComponent>());
         }
-        
+
         [Test]
         public void ViewShouldReturnNoViews()
         {
@@ -277,6 +259,62 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual(0, view.Length);
         }
 
-        private EcsRegistry registry;
+        [Test]
+        public void ViewShouldReturn2ViewsWith2Components2()
+        {
+            var entityA = registry.CreateEntity();
+            var entityB = registry.CreateEntity();
+            var testComponentA = registry.AddComponent<TestComponent>(entityA);
+            var tagComponentA = registry.AddComponent<TagComponent>(entityA, "TagA");
+            var testComponentB = registry.AddComponent<TestComponent>(entityB);
+            var tagComponentB = registry.AddComponent<TagComponent>(entityB, "TagB");
+
+            var views = registry.View<TestComponent, TagComponent>().ToArray();
+            var (testA, tagA) = views[0];
+            var (testB, tagB) = views[1];
+
+
+            Assert.AreEqual(testComponentA, testA);
+            Assert.AreEqual(testComponentB, testB);
+            Assert.AreEqual(tagComponentA, tagA);
+            Assert.AreEqual(tagComponentB, tagB);
+        }
+
+        [Test]
+        public void ViewShouldReturn1ViewWith2Components2()
+        {
+            var entityA = registry.CreateEntity();
+            var entityB = registry.CreateEntity();
+            var testComponentA = registry.AddComponent<TestComponent>(entityA);
+            var tagComponentA = registry.AddComponent<TagComponent>(entityA, "TagA");
+            var testComponentB = registry.AddComponent<TestComponent>(entityB);
+
+            var views = registry.View<TestComponent, TagComponent>().ToArray();
+
+            Assert.AreEqual(views.Length, 1);
+            var (testA, tagA) = views[0];
+
+
+            Assert.AreEqual(testComponentA, testA);
+            Assert.AreEqual(tagComponentA, tagA);
+        }
+
+        private class TestComponent
+        {
+        }
+
+        private class TagComponent
+        {
+            public TagComponent()
+            {
+            }
+
+            public TagComponent(string tag)
+            {
+                Tag = tag;
+            }
+
+            public string Tag { get; }
+        }
     }
 }

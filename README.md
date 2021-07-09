@@ -2,9 +2,9 @@
 A simple Entity-Component-System for .NET 5.0.
 
 ## Getting Started
-Use structs to define data-only components.
+Use classes to define data-only components.
 ```
-public struct TagComponent
+public class TagComponent
 {
     public string Tag { get; }
 
@@ -33,14 +33,6 @@ Implement the `EcsSystem` abstract class to define your own systems.
 ```
 public class PrintTagSystem : EcsSystem
 {
-    public override void Dispatch()
-    {
-        foreach (var tagComponent in components)
-        {
-            Console.WriteLine(tagComponent.Tag);
-        }
-    }
-
     protected override void OnComponentAdded(object sender, ComponentEventArgs e)
     {
         if (e.Component is TagComponent tagComponent)

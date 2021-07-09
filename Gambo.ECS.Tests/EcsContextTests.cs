@@ -4,6 +4,8 @@ namespace Gambo.ECS.Tests
 {
     public class EcsContextTests
     {
+        private EcsContext context;
+
         [SetUp]
         public void SetUp()
         {
@@ -15,7 +17,7 @@ namespace Gambo.ECS.Tests
         {
             var system = context.AddSystem<TestSystem>("Name");
             var addedSystem = context.GetSystem<TestSystem>();
-            
+
             Assert.AreEqual(system, addedSystem);
         }
 
@@ -24,7 +26,7 @@ namespace Gambo.ECS.Tests
         {
             var systemA = context.AddSystem<TestSystem>("Name");
             var systemB = context.AddSystem<TestSystem>("Name");
-            
+
             Assert.AreEqual(1, context.Systems.Count);
         }
 
@@ -32,18 +34,16 @@ namespace Gambo.ECS.Tests
         public void SystemShouldBeRemoved()
         {
             var system = context.AddSystem<TestSystem>("Name");
-            bool removed = context.RemoveSystem<TestSystem>();
-            
+            var removed = context.RemoveSystem<TestSystem>();
+
             Assert.True(removed);
         }
 
         [Test]
         public void SystemShouldNotBeRemovedIfNotExists()
         {
-            bool removed = context.RemoveSystem<TestSystem>();
+            var removed = context.RemoveSystem<TestSystem>();
             Assert.False(removed);
         }
-        
-        private EcsContext context;
     }
 }

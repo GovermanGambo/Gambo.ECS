@@ -12,28 +12,29 @@ namespace Gambo.ECS.Tests
         {
         }
     }
-    
+
     internal class TestSystem : EcsSystem
     {
-        public string Name { get; }
         public TestSystem(string name)
         {
             Name = name;
         }
 
+        public string Name { get; }
+
         protected override void OnComponentAdded(object sender, ComponentEventArgs e)
         {
-            
         }
 
         protected override void OnComponentRemoved(object sender, ComponentEventArgs e)
         {
-            
         }
     }
-    
+
     public class EcsSystemTests
     {
+        private TestSystem system;
+
         [SetUp]
         public void Setup()
         {
@@ -48,7 +49,7 @@ namespace Gambo.ECS.Tests
 
             var systemB = new TestSystem("TestSystemB");
             systemB.Registry = registry;
-            
+
             Assert.AreEqual(system, systemB);
         }
 
@@ -61,10 +62,10 @@ namespace Gambo.ECS.Tests
 
             system.Registry = registryA;
             systemB.Registry = registryB;
-            
+
             Assert.AreNotEqual(system, systemB);
         }
-        
+
         [Test]
         public void SystemsShouldNotBeEqualIfDifferentTypes()
         {
@@ -73,10 +74,8 @@ namespace Gambo.ECS.Tests
 
             system.Registry = registry;
             systemB.Registry = registry;
-            
+
             Assert.AreNotEqual(system, systemB);
         }
-
-        private TestSystem system;
     }
 }

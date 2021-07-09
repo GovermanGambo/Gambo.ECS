@@ -4,21 +4,20 @@ namespace Gambo.ECS
 {
     public abstract class EcsSystem
     {
+        private bool enabled = true;
+        private EcsRegistry registry;
+
         public bool Enabled
         {
             get => enabled;
             set
             {
                 enabled = value;
-                
+
                 if (enabled)
-                {
                     OnEnableBase();
-                }
                 else
-                {
                     OnDisableBase();
-                }
             }
         }
 
@@ -32,15 +31,14 @@ namespace Gambo.ECS
                     registry.OnComponentAdded -= OnComponentAdded;
                     registry.OnComponentRemoved -= OnComponentRemoved;
                 }
-                
+
                 registry = value;
 
                 if (registry == null) return;
-                
+
                 registry.OnComponentAdded += OnComponentAdded;
                 registry.OnComponentRemoved += OnComponentRemoved;
                 OnRegistryAttached();
-
             }
         }
 
@@ -52,10 +50,7 @@ namespace Gambo.ECS
 
         public override bool Equals(object? obj)
         {
-            if (obj is EcsSystem other)
-            {
-                return other.GetType() == GetType() && other.Registry == Registry;
-            }
+            if (obj is EcsSystem other) return other.GetType() == GetType() && other.Registry == Registry;
 
             return false;
         }
@@ -72,32 +67,24 @@ namespace Gambo.ECS
 
         protected virtual void OnEnable()
         {
-            
         }
 
         protected virtual void OnDisable()
         {
-            
         }
 
         protected virtual void OnComponentAdded(object sender, ComponentEventArgs e)
         {
-            
         }
 
         protected virtual void OnComponentRemoved(object sender, ComponentEventArgs e)
         {
-            
         }
 
         protected virtual void OnRegistryAttached()
         {
-            
         }
 
-        private bool enabled = true;
-        private EcsRegistry registry;
-        
         private void OnEnableBase()
         {
             OnEnable();
