@@ -68,6 +68,7 @@ namespace Gambo.ECS
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
+        [Obsolete("This method has been deprecated. Use View<T1, T2, ...>() instead.")]
         public ComponentView[] View(params Type[] types)
         {
             var view = new List<ComponentView>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Gambo.ECS
 {
+    [Obsolete("This class has been deprecated. Use tuples instead.")]
     public class ComponentView
     {
         private readonly Dictionary<Type, object> components;

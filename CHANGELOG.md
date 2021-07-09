@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.3.0
+ - Added additional 'View' methods that returns tuples instead of ComponentView.
+ - Set ComponentView and its related methods to be deprecated.
+ - Added method 'FindComponentOfType<T>' to registry
+
 ### Version 0.2.1
  - Removed abstract 'Dispatch' method on 'EcsSystem'
  - Set Systems to be enabled by default

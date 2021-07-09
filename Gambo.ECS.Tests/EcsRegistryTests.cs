@@ -299,6 +299,28 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual(tagComponentA, tagA);
         }
 
+        [Test]
+        public void FindComponentOfTypeShouldReturn1Component()
+        {
+            var entityA = registry.CreateEntity();
+            var testComponent = registry.AddComponent<TestComponent>(entityA);
+
+            var result = registry.FindComponentOfType<TestComponent>();
+            
+            Assert.NotNull(result);
+            Assert.AreEqual(testComponent, result);
+        }
+        
+        [Test]
+        public void FindComponentOfTypeShouldReturnNull()
+        {
+            var entityA = registry.CreateEntity();
+
+            var result = registry.FindComponentOfType<TestComponent>();
+            
+            Assert.Null(result);
+        }
+
         private class TestComponent
         {
         }

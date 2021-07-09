@@ -102,5 +102,21 @@ namespace Gambo.ECS
 
             return result;
         }
+
+        /// <summary>
+        /// Resolves the first discovered component of the specified type.
+        /// </summary>
+        /// <param name="registry"></param>
+        /// <typeparam name="T">The component's type</typeparam>
+        /// <returns></returns>
+        public static T FindComponentOfType<T>(this EcsRegistry registry) where T : class
+        {
+            var component = registry.Components
+                .Values
+                .SelectMany(x => x)
+                .FirstOrDefault(c => c.GetType() == typeof(T));
+
+            return component as T;
+        }
     }
 }
