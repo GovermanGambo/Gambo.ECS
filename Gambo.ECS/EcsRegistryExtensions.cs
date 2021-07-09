@@ -15,8 +15,20 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                var componentA = components[entity].FirstOrDefault(t => t.GetType() == typeof(T1)) as T1;
-                var componentB = components[entity].FirstOrDefault(t => t.GetType() == typeof(T2)) as T2;
+                T1 componentA = null;
+                T2 componentB = null;
+                foreach (var component in components[entity])
+                {
+                    switch (component)
+                    {
+                        case T1 t1:
+                            componentA = t1;
+                            break;
+                        case T2 t2:
+                            componentB = t2;
+                            break;
+                    }
+                }
 
                 if (componentA == null || componentB == null) continue;
 
@@ -37,9 +49,24 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                var componentA = components[entity].FirstOrDefault(t => t.GetType() == typeof(T1)) as T1;
-                var componentB = components[entity].FirstOrDefault(t => t.GetType() == typeof(T2)) as T2;
-                var componentC = components[entity].FirstOrDefault(t => t.GetType() == typeof(T3)) as T3;
+                T1 componentA = null;
+                T2 componentB = null;
+                T3 componentC = null;
+                foreach (var component in components[entity])
+                {
+                    switch (component)
+                    {
+                        case T1 t1:
+                            componentA = t1;
+                            break;
+                        case T2 t2:
+                            componentB = t2;
+                            break;
+                        case T3 t3:
+                            componentC = t3;
+                            break;
+                    }
+                }
 
                 if (componentA == null || componentB == null || componentC == null) continue;
 
@@ -61,10 +88,28 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                var componentA = components[entity].FirstOrDefault(t => t.GetType() == typeof(T1)) as T1;
-                var componentB = components[entity].FirstOrDefault(t => t.GetType() == typeof(T2)) as T2;
-                var componentC = components[entity].FirstOrDefault(t => t.GetType() == typeof(T3)) as T3;
-                var componentD = components[entity].FirstOrDefault(t => t.GetType() == typeof(T4)) as T4;
+                T1 componentA = null;
+                T2 componentB = null;
+                T3 componentC = null;
+                T4 componentD = null;
+                foreach (var component in components[entity])
+                {
+                    switch (component)
+                    {
+                        case T1 t1:
+                            componentA = t1;
+                            break;
+                        case T2 t2:
+                            componentB = t2;
+                            break;
+                        case T3 t3:
+                            componentC = t3;
+                            break;
+                        case T4 t4:
+                            componentD = t4;
+                            break;
+                    }
+                }
 
                 if (componentA == null || componentB == null || componentC == null || componentD == null) continue;
 
@@ -87,11 +132,32 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                var componentA = components[entity].FirstOrDefault(t => t.GetType() == typeof(T1)) as T1;
-                var componentB = components[entity].FirstOrDefault(t => t.GetType() == typeof(T2)) as T2;
-                var componentC = components[entity].FirstOrDefault(t => t.GetType() == typeof(T3)) as T3;
-                var componentD = components[entity].FirstOrDefault(t => t.GetType() == typeof(T4)) as T4;
-                var componentE = components[entity].FirstOrDefault(t => t.GetType() == typeof(T5)) as T5;
+                T1 componentA = null;
+                T2 componentB = null;
+                T3 componentC = null;
+                T4 componentD = null;
+                T5 componentE = null;
+                foreach (var component in components[entity])
+                {
+                    switch (component)
+                    {
+                        case T1 t1:
+                            componentA = t1;
+                            break;
+                        case T2 t2:
+                            componentB = t2;
+                            break;
+                        case T3 t3:
+                            componentC = t3;
+                            break;
+                        case T4 t4:
+                            componentD = t4;
+                            break;
+                        case T5 t5:
+                            componentE = t5;
+                            break;
+                    }
+                }
 
                 if (componentA == null || componentB == null || componentC == null || componentD == null
                     || componentE == null)
@@ -111,7 +177,7 @@ namespace Gambo.ECS
         /// <returns></returns>
         public static T FindComponentOfType<T>(this EcsRegistry registry) where T : class
         {
-            var component = registry.Components
+            object component = registry.Components
                 .Values
                 .SelectMany(x => x)
                 .FirstOrDefault(c => c.GetType() == typeof(T));

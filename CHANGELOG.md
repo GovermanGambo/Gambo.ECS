@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.3.1
+ - Improved performance of View methods
+
 ### Version 0.3.0
  - Added additional 'View' methods that returns tuples instead of ComponentView.
  - Set ComponentView and its related methods to be deprecated.
