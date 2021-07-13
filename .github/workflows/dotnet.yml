@@ -29,4 +29,4 @@ jobs:
           PROJECT_FILE_PATH: Gambo.ECS/Gambo.ECS.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
           VERSION_FILE_PATH: CHANGELOG.md
-          VERSION_REGEX: ^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$
+          VERSION_REGEX: Version (.*)
