@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.3.2
+ - Removed ComponentView and its associated methods
+
 ### Version 0.3.1
  - Improved performance of View methods
 

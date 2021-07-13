@@ -63,30 +63,6 @@ namespace Gambo.ECS
             return added;
         }
 
-        /// <summary>
-        ///     Returns a collection of attached components per entity, based on the filter query
-        /// </summary>
-        /// <param name="types"></param>
-        /// <returns></returns>
-        [Obsolete("This method has been deprecated. Use View<T1, T2, ...>() instead.")]
-        public ComponentView[] View(params Type[] types)
-        {
-            var view = new List<ComponentView>();
-            foreach (var entity in components.Keys)
-            {
-                var componentsInEntity = components[entity]
-                    .ToDictionary(o => o.GetType(), o => o);
-
-                var foundComponents = componentsInEntity
-                    .Where(pair => types.Contains(pair.Key))
-                    .ToDictionary(pair => pair.Key, pair => pair.Value);
-
-                if (foundComponents.Count == types.Length) view.Add(new ComponentView(foundComponents));
-            }
-
-            return view.ToArray();
-        }
-
         public bool RemoveEntity(EcsEntity entity, bool permanent = false)
         {
             var removed = entities.Remove(entity);
