@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.4.0 - 2021-07-14
+ - EcsContext:
+   - Must now be constructed using EcsContextBuilder
+   - Added support for resolving system services when adding a system.
+
 ### Version 0.3.2
  - Removed ComponentView and its associated methods
 

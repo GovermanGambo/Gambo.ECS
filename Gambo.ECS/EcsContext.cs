@@ -8,25 +8,23 @@ namespace Gambo.ECS
     public class EcsContext
     {
         private readonly HashSet<EcsSystem> systems;
-        private readonly IServiceProvider services;
 
-        public EcsContext()
+        internal EcsContext()
         {
             Registry = new EcsRegistry();
             systems = new HashSet<EcsSystem>();
         }
 
-        public EcsContext(IServiceProvider services)
-        {
-            this.services = services;
-            
-            Registry = new EcsRegistry();
-            systems = new HashSet<EcsSystem>();
-        }
-
-        public EcsRegistry Registry { get; }
+        public EcsRegistry Registry { get; internal set; }
         public ReadOnlyCollection<EcsSystem> Systems => new(systems.ToList());
+        internal IServiceProvider ServiceProvider { get; set; }
 
+        /// <summary>
+        /// Adds a system to the context, with the specified constructor parameters.
+        /// </summary>
+        /// <param name="args">Constructor parameters of the specified system.</param>
+        /// <typeparam name="TSystem">The system sub-type</typeparam>
+        /// <returns></returns>
         public TSystem AddSystem<TSystem>(params object[] args) where TSystem : EcsSystem
         {
             var system = CreateSystem<TSystem>(args);
@@ -36,9 +34,16 @@ namespace Gambo.ECS
             return system;
         }
 
+        /// <summary>
+        /// Adds a system to the context. If a service provider is attached, it will use it to resolve the
+        /// system's services during construction.
+        /// </summary>
+        /// <typeparam name="TSystem"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public TSystem AddSystem<TSystem>() where TSystem : EcsSystem
         {
-            if (services == null)
+            if (ServiceProvider == null)
             {
                 return AddSystem<TSystem>(Array.Empty<object>());
             }
@@ -51,9 +56,9 @@ namespace Gambo.ECS
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                var type = paramInfos[i].GetType();
-                object service = services.GetService(type);
-                parameters[i] = service;
+                var type = paramInfos[i].ParameterType;
+                object service = ServiceProvider.GetService(type);
+                parameters[i] = service ?? throw new ArgumentException($"No service of type {type} was found in the registry!");
             }
 
             var system = CreateSystem<TSystem>(parameters);
