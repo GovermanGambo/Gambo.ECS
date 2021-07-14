@@ -8,26 +8,16 @@ namespace Gambo.ECS
     public class EcsContext
     {
         private readonly HashSet<EcsSystem> systems;
-        private IServiceProvider services;
 
-        public EcsContext()
+        internal EcsContext()
         {
             Registry = new EcsRegistry();
             systems = new HashSet<EcsSystem>();
         }
 
-        public EcsRegistry Registry { get; }
+        public EcsRegistry Registry { get; internal set; }
         public ReadOnlyCollection<EcsSystem> Systems => new(systems.ToList());
-
-        /// <summary>
-        /// Attaches a service provider to the context, which can be used to resolve system services during
-        /// creation.
-        /// </summary>
-        /// <param name="serviceProvider"></param>
-        public void AddServiceProvider(IServiceProvider serviceProvider)
-        {
-            this.services = serviceProvider;
-        }
+        internal IServiceProvider ServiceProvider { get; set; }
 
         /// <summary>
         /// Adds a system to the context, with the specified constructor parameters.
@@ -53,7 +43,7 @@ namespace Gambo.ECS
         /// <exception cref="ArgumentException"></exception>
         public TSystem AddSystem<TSystem>() where TSystem : EcsSystem
         {
-            if (services == null)
+            if (ServiceProvider == null)
             {
                 return AddSystem<TSystem>(Array.Empty<object>());
             }
@@ -67,7 +57,7 @@ namespace Gambo.ECS
             for (int i = 0; i < parameters.Length; i++)
             {
                 var type = paramInfos[i].ParameterType;
-                object service = services.GetService(type);
+                object service = ServiceProvider.GetService(type);
                 parameters[i] = service ?? throw new ArgumentException($"No service of type {type} was found in the registry!");
             }
 

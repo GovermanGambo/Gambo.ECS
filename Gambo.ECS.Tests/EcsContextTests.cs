@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using NUnit.Framework;
 
 namespace Gambo.ECS.Tests
@@ -12,7 +11,7 @@ namespace Gambo.ECS.Tests
         [SetUp]
         public void SetUp()
         {
-            context = new EcsContext();
+            context = new EcsContextBuilder().Build();
         }
 
         [Test]
@@ -55,12 +54,14 @@ namespace Gambo.ECS.Tests
             var services = new ServiceCollection();
             services.AddTransient<IService, TestService>();
             var serviceProvider = services.BuildServiceProvider();
+
+            var diContext = new EcsContextBuilder()
+                .WithServiceProvider(serviceProvider)
+                .Build();
             
-            context.AddServiceProvider(serviceProvider);
+            diContext.AddSystem<DISystem>();
 
-            context.AddSystem<DISystem>();
-
-            var system = context.GetSystem<DISystem>();
+            var system = diContext.GetSystem<DISystem>();
             bool result = system.DoSomething();
             
             Assert.True(result);
@@ -72,9 +73,11 @@ namespace Gambo.ECS.Tests
             var services = new ServiceCollection();
             var serviceProvider = services.BuildServiceProvider();
             
-            context.AddServiceProvider(serviceProvider);
+            var diContext = new EcsContextBuilder()
+                .WithServiceProvider(serviceProvider)
+                .Build();
 
-            Assert.Throws<ArgumentException>(() => context.AddSystem<DISystem>());
+            Assert.Throws<ArgumentException>(() => diContext.AddSystem<DISystem>());
         }
     }
 
