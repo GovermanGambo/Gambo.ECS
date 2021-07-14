@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
  - EcsContext:
    - Must now be constructed using EcsContextBuilder
    - Added support for resolving system services when adding a system.
+ - Removed single instance per type constraint for EcsRegistry
 
 ### Version 0.3.2
  - Removed ComponentView and its associated methods
