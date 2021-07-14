@@ -1,8 +1,6 @@
-name: .NET
+name: Build
 
 on:
-  push:
-    branches: [ master, prerelease ]
   pull_request:
     branches: [ master, prerelease ]
 
@@ -23,10 +21,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Publish Gambo.ECS
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-          PROJECT_FILE_PATH: Gambo.ECS/Gambo.ECS.csproj
-          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-          VERSION_FILE_PATH: Gambo.ECS/Gambo.ECS.csproj
-          VERSION_REGEX: <PackageVersion>(.*)<\/PackageVersion>
