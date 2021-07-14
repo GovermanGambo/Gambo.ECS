@@ -84,10 +84,6 @@ namespace Gambo.ECS
 
             var componentsInEntity = components[entity];
 
-            foreach (var c in componentsInEntity)
-                if (c.GetType() == typeof(T))
-                    throw new ArgumentException($"A component of type {typeof(T)} is already attached to the entity.");
-
             componentsInEntity.Add(component);
 
             OnComponentAdded?.Invoke(this, new ComponentEventArgs(entity, component));
