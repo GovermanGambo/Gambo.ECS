@@ -8,7 +8,7 @@ namespace Gambo.ECS
     public class EcsContext
     {
         private readonly HashSet<EcsSystem> systems;
-        private readonly IServiceProvider services;
+        private IServiceProvider services;
 
         public EcsContext()
         {
@@ -16,17 +16,25 @@ namespace Gambo.ECS
             systems = new HashSet<EcsSystem>();
         }
 
-        public EcsContext(IServiceProvider services)
-        {
-            this.services = services;
-            
-            Registry = new EcsRegistry();
-            systems = new HashSet<EcsSystem>();
-        }
-
         public EcsRegistry Registry { get; }
         public ReadOnlyCollection<EcsSystem> Systems => new(systems.ToList());
 
+        /// <summary>
+        /// Attaches a service provider to the context, which can be used to resolve system services during
+        /// creation.
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public void AddServiceProvider(IServiceProvider serviceProvider)
+        {
+            this.services = serviceProvider;
+        }
+
+        /// <summary>
+        /// Adds a system to the context, with the specified constructor parameters.
+        /// </summary>
+        /// <param name="args">Constructor parameters of the specified system.</param>
+        /// <typeparam name="TSystem">The system sub-type</typeparam>
+        /// <returns></returns>
         public TSystem AddSystem<TSystem>(params object[] args) where TSystem : EcsSystem
         {
             var system = CreateSystem<TSystem>(args);
@@ -36,6 +44,13 @@ namespace Gambo.ECS
             return system;
         }
 
+        /// <summary>
+        /// Adds a system to the context. If a service provider is attached, it will use it to resolve the
+        /// system's services during construction.
+        /// </summary>
+        /// <typeparam name="TSystem"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public TSystem AddSystem<TSystem>() where TSystem : EcsSystem
         {
             if (services == null)
@@ -51,9 +66,9 @@ namespace Gambo.ECS
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                var type = paramInfos[i].GetType();
+                var type = paramInfos[i].ParameterType;
                 object service = services.GetService(type);
-                parameters[i] = service;
+                parameters[i] = service ?? throw new ArgumentException($"No service of type {type} was found in the registry!");
             }
 
             var system = CreateSystem<TSystem>(parameters);

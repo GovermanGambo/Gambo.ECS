@@ -120,14 +120,6 @@ namespace Gambo.ECS.Tests
         }
 
         [Test]
-        public void ComponentShouldNotBeAddedIfAlreadyExists()
-        {
-            var entity = registry.CreateEntity();
-            registry.AddComponent<TestComponent>(entity);
-            Assert.Throws<ArgumentException>(() => registry.AddComponent<TestComponent>(entity));
-        }
-
-        [Test]
         public void ComponentShouldBeAddedWithArguments()
         {
             var entity = registry.CreateEntity();
