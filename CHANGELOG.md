@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
    - Must now be constructed using EcsContextBuilder
    - Added support for resolving system services when adding a system.
  - Removed single instance per type constraint for EcsRegistry
+   - Added [Unique] attribute which can be used to specify components that should be unique per entity
 
 ### Version 0.3.2
  - Removed ComponentView and its associated methods
