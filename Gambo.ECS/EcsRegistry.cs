@@ -84,9 +84,14 @@ namespace Gambo.ECS
 
             var componentsInEntity = components[entity];
 
-            foreach (var c in componentsInEntity)
-                if (c.GetType() == typeof(T))
-                    throw new ArgumentException($"A component of type {typeof(T)} is already attached to the entity.");
+            var attributes = Attribute.GetCustomAttributes(component.GetType());
+            if (attributes.Any(a => a is UniqueAttribute))
+            {
+                if (componentsInEntity.Any(c => c.GetType() == typeof(T)))
+                {
+                    throw new ArgumentException($"An instance of this unique component already exists on entity!");
+                }
+            }
 
             componentsInEntity.Add(component);
 

@@ -21,7 +21,7 @@ public class TagComponent
 ```
 Create a new `EcsContext` class, and use `registry.CreateEntity()` to create a new entity in the context's registry.
 ```
-EcsContext context = new EcsContext();
+EcsContext context = new EcsContextBuilder().Build();
 EcsRegistry registry = context.Registry;
 EcsEntity entity = registry.CreateEntity()
 ```
@@ -60,4 +60,15 @@ public class PrintTagSystem : EcsSystem
 Add your system to the context to attach it to the registry.
 ```
 context.AddSystem<PrintTagSystem>();
+```
+Attach an IServiceProvider to the EcsContext during construction to enable dependency injection when adding systems to the context.
+```
+var services = new ServiceCollection();
+...
+Add services
+...
+
+var context = new EcsContextBuilder()
+    .WithServiceProvider(services.BuildServiceProvider())
+    .Build();
 ```
