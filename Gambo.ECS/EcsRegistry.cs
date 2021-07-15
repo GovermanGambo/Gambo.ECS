@@ -84,6 +84,15 @@ namespace Gambo.ECS
 
             var componentsInEntity = components[entity];
 
+            var attributes = Attribute.GetCustomAttributes(component.GetType());
+            if (attributes.Any(a => a is UniqueAttribute))
+            {
+                if (componentsInEntity.Any(c => c.GetType() == typeof(T)))
+                {
+                    throw new ArgumentException($"An instance of this unique component already exists on entity!");
+                }
+            }
+
             componentsInEntity.Add(component);
 
             OnComponentAdded?.Invoke(this, new ComponentEventArgs(entity, component));
