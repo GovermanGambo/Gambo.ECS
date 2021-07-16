@@ -17,7 +17,7 @@ namespace Gambo.ECS.Tests
         [Test]
         public void SystemShouldBeAddedIfNotExists()
         {
-            var system = context.AddSystem<TestSystem>("Name");
+            var system = context.AddSystem<TestSystem>(true, "Name");
             var addedSystem = context.GetSystem<TestSystem>();
 
             Assert.AreEqual(system, addedSystem);
@@ -26,8 +26,8 @@ namespace Gambo.ECS.Tests
         [Test]
         public void SystemShouldNotBeAddedIfExists()
         {
-            var systemA = context.AddSystem<TestSystem>("Name");
-            var systemB = context.AddSystem<TestSystem>("Name");
+            var systemA = context.AddSystem<TestSystem>(true, "Name");
+            var systemB = context.AddSystem<TestSystem>(true, "Name");
 
             Assert.AreEqual(1, context.Systems.Count);
         }
@@ -35,7 +35,7 @@ namespace Gambo.ECS.Tests
         [Test]
         public void SystemShouldBeRemoved()
         {
-            var system = context.AddSystem<TestSystem>("Name");
+            var system = context.AddSystem<TestSystem>(true, "Name");
             var removed = context.RemoveSystem<TestSystem>();
 
             Assert.True(removed);
