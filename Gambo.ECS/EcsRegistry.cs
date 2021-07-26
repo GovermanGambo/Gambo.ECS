@@ -74,20 +74,20 @@ namespace Gambo.ECS
             return removed;
         }
 
-        public T AddComponent<T>(EcsEntity entity, params object[] args) where T : class
+        public object AddComponent(Type componentType, EcsEntity entity, params object[] args)
         {
             AssertEntity(entity);
 
-            var component = (T) Activator.CreateInstance(typeof(T), args);
+            var component = Activator.CreateInstance(componentType, args);
 
             if (!components.ContainsKey(entity)) components.Add(entity, new HashSet<object>());
 
             var componentsInEntity = components[entity];
 
-            var attributes = Attribute.GetCustomAttributes(component.GetType());
+            var attributes = Attribute.GetCustomAttributes(componentType);
             if (attributes.Any(a => a is UniqueAttribute))
             {
-                if (componentsInEntity.Any(c => c.GetType() == typeof(T)))
+                if (componentsInEntity.Any(c => c.GetType() == componentType))
                 {
                     throw new ArgumentException($"An instance of this unique component already exists on entity!");
                 }

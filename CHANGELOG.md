@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.4.1 - 2021-07-26
+ - Changed AddComponent to work without type parameters.
+
 ### Version 0.4.0 - 2021-07-14
  - EcsContext:
    - Must now be constructed using EcsContextBuilder
