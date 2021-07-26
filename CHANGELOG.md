@@ -2,10 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.4.2 - 2021-07-26
+ - Changed AddComponent to work without type parameters.
+
+### Version 0.4.1 - 2021-07-15
+ - Fixed issue where you can't differentiate between adding systems with/without DI
+
 ### Version 0.4.0 - 2021-07-14
  - EcsContext:
    - Must now be constructed using EcsContextBuilder
    - Added support for resolving system services when adding a system.
+ - Removed single instance per type constraint for EcsRegistry
+   - Added [Unique] attribute which can be used to specify components that should be unique per entity
 
 ### Version 0.3.2
  - Removed ComponentView and its associated methods

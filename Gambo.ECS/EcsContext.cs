@@ -25,8 +25,13 @@ namespace Gambo.ECS
         /// <param name="args">Constructor parameters of the specified system.</param>
         /// <typeparam name="TSystem">The system sub-type</typeparam>
         /// <returns></returns>
-        public TSystem AddSystem<TSystem>(params object[] args) where TSystem : EcsSystem
+        public TSystem AddSystem<TSystem>(bool hasParameters, params object[] args) where TSystem : EcsSystem
         {
+            if (!hasParameters)
+            {
+                return AddSystem<TSystem>();
+            }
+            
             var system = CreateSystem<TSystem>(args);
 
             AddSystem(system);
@@ -45,7 +50,7 @@ namespace Gambo.ECS
         {
             if (ServiceProvider == null)
             {
-                return AddSystem<TSystem>(Array.Empty<object>());
+                return AddSystem<TSystem>(true, Array.Empty<object>());
             }
             
             var systemType = typeof(TSystem);

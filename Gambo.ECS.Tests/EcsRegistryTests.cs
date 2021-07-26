@@ -97,6 +97,47 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual(1, registry.GetComponents(entity).Count);
             Assert.AreEqual(component, registry.GetComponent<TestComponent>(entity));
         }
+        
+        [Test]
+        public void ComponentShouldBeAddedIfComponentIsAlreadyAdded()
+        {
+            var entity = registry.CreateEntity();
+            var component = registry.AddComponent<TestComponent>(entity);
+            var component2 = registry.AddComponent<TestComponent>(entity);
+
+            Assert.NotNull(component);
+            Assert.NotNull(component2);
+            Assert.AreEqual(2, registry.GetComponents(entity).Count);
+            Assert.AreEqual(component, registry.GetComponent<TestComponent>(entity));
+        }
+
+        [Test]
+        public void ComponentShouldbeAddedWithoutTypeParams()
+        {
+            var entity = registry.CreateEntity();
+            var component = registry.AddComponent(typeof(TagComponent), entity, "Test");
+            
+            Assert.AreEqual(typeof(TagComponent), component.GetType());
+
+            var tagComponent = component as TagComponent;
+            
+            Assert.NotNull(tagComponent);
+            Assert.AreEqual("Test", tagComponent.Tag);
+        }
+        
+        [Test]
+        public void UniqueComponentShouldNotBeAddedIfComponentIsAlreadyAdded()
+        {
+            var entity = registry.CreateEntity();
+            var component = registry.AddComponent<UniqueComponent>(entity);
+            Assert.Throws<ArgumentException>(() => registry.AddComponent<UniqueComponent>(entity));
+        }
+
+        [Unique]
+        public class UniqueComponent
+        {
+            
+        }
 
         [Test]
         public void ComponentShouldBeRemovedIfComponentExists()

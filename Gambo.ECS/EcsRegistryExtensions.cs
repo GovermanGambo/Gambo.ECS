@@ -5,6 +5,12 @@ namespace Gambo.ECS
 {
     public static class EcsRegistryExtensions
     {
+        public static T AddComponent<T>(this EcsRegistry registry, EcsEntity entity, params object[] args) where T : class
+        {
+            object component = registry.AddComponent(typeof(T), entity, args);
+            return component as T;
+        }
+        
         public static IEnumerable<(T1, T2)> View<T1, T2>(this EcsRegistry registry)
             where T1 : class
             where T2 : class

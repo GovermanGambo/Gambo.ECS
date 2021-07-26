@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>9</LangVersion>
-        <PackageVersion>0.4.0-pre002</PackageVersion>
+        <PackageVersion>0.4.2</PackageVersion>
         <Title>Gambo.ECS</Title>
         <Company>Gambo</Company>
         <Authors>GovermanGambo</Authors>
@@ -12,6 +12,7 @@
         <PackageLicenseUrl>https://github.com/GovermanGambo/Gambo.ECS/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/GovermanGambo/Gambo.ECS</RepositoryUrl>
         <Nullable>disable</Nullable>
+        <PackageReleaseNotes>Fixed issue where you can't differentiate between adding systems with/without DI</PackageReleaseNotes>
     </PropertyGroup>
 
 </Project>
