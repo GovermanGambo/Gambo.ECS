@@ -110,6 +110,20 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual(2, registry.GetComponents(entity).Count);
             Assert.AreEqual(component, registry.GetComponent<TestComponent>(entity));
         }
+
+        [Test]
+        public void ComponentShouldbeAddedWithoutTypeParams()
+        {
+            var entity = registry.CreateEntity();
+            var component = registry.AddComponent(typeof(TagComponent), entity, "Test");
+            
+            Assert.AreEqual(typeof(TagComponent), component.GetType());
+
+            var tagComponent = component as TagComponent;
+            
+            Assert.NotNull(tagComponent);
+            Assert.AreEqual("Test", tagComponent.Tag);
+        }
         
         [Test]
         public void UniqueComponentShouldNotBeAddedIfComponentIsAlreadyAdded()
