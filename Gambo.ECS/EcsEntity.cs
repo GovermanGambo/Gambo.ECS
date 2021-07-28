@@ -4,41 +4,41 @@ namespace Gambo.ECS
 {
     public class EcsEntity
     {
-        private readonly EcsRegistry owner;
+        private readonly EcsRegistry m_owner;
 
         internal EcsEntity(int id, EcsRegistry owner)
         {
-            ID = id;
-            this.owner = owner;
+            Id = id;
+            m_owner = owner;
         }
 
-        public int ID { get; }
+        public int Id { get; }
 
         public static bool operator ==(EcsEntity left, EcsEntity right)
         {
-            return left?.ID == right?.ID && left?.owner == right?.owner;
+            return left?.Id == right?.Id && left?.m_owner == right?.m_owner;
         }
 
         public static bool operator !=(EcsEntity left, EcsEntity right)
         {
-            return left?.ID != right?.ID || left?.owner != right?.owner;
+            return left?.Id != right?.Id || left?.m_owner != right?.m_owner;
         }
 
         public override bool Equals(object? obj)
         {
-            if (obj is EcsEntity other) return ID == other.ID && owner == other.owner;
+            if (obj is EcsEntity other) return Id == other.Id && m_owner == other.m_owner;
 
             return false;
         }
 
         protected bool Equals(EcsEntity other)
         {
-            return ID == other.ID && Equals(owner, other.owner);
+            return Id == other.Id && Equals(m_owner, other.m_owner);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(ID, owner);
+            return HashCode.Combine(Id, m_owner);
         }
     }
 

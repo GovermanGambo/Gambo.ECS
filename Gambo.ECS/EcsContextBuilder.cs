@@ -4,11 +4,11 @@ namespace Gambo.ECS
 {
     public class EcsContextBuilder
     {
-        private readonly EcsContext context;
+        private readonly EcsContext m_context;
 
         public EcsContextBuilder()
         {
-            context = new EcsContext();
+            m_context = new EcsContext();
         }
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace Gambo.ECS
         /// <returns></returns>
         public EcsContextBuilder WithRegistry(EcsRegistry registry)
         {
-            context.Registry = registry;
+            m_context.Registry = registry;
 
             return this;
         }
@@ -30,7 +30,7 @@ namespace Gambo.ECS
         /// <returns></returns>
         public EcsContextBuilder WithServiceProvider(IServiceProvider serviceProvider)
         {
-            context.ServiceProvider = serviceProvider;
+            m_context.ServiceProvider = serviceProvider;
 
             return this;
         }
@@ -41,7 +41,7 @@ namespace Gambo.ECS
         /// <returns></returns>
         public EcsContext Build()
         {
-            return context;
+            return m_context;
         }
     }
 }

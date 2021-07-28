@@ -4,17 +4,17 @@ namespace Gambo.ECS
 {
     public abstract class EcsSystem
     {
-        private bool enabled = true;
-        private EcsRegistry registry;
+        private bool m_enabled = true;
+        private EcsRegistry m_registry;
 
         public bool Enabled
         {
-            get => enabled;
+            get => m_enabled;
             set
             {
-                enabled = value;
+                m_enabled = value;
 
-                if (enabled)
+                if (m_enabled)
                     OnEnableBase();
                 else
                     OnDisableBase();
@@ -23,29 +23,29 @@ namespace Gambo.ECS
 
         public EcsRegistry Registry
         {
-            get => registry;
+            get => m_registry;
             set
             {
-                if (registry != null)
+                if (m_registry != null)
                 {
-                    registry.OnComponentAdded -= OnComponentAdded;
-                    registry.OnComponentRemoved -= OnComponentRemoved;
+                    m_registry.OnComponentAdded -= OnComponentAdded;
+                    m_registry.OnComponentRemoved -= OnComponentRemoved;
                 }
 
-                registry = value;
+                m_registry = value;
 
-                if (registry == null) return;
+                if (m_registry == null) return;
 
-                registry.OnComponentAdded += OnComponentAdded;
-                registry.OnComponentRemoved += OnComponentRemoved;
+                m_registry.OnComponentAdded += OnComponentAdded;
+                m_registry.OnComponentRemoved += OnComponentRemoved;
                 OnRegistryAttached();
             }
         }
 
         ~EcsSystem()
         {
-            registry.OnComponentAdded -= OnComponentAdded;
-            registry.OnComponentRemoved -= OnComponentRemoved;
+            m_registry.OnComponentAdded -= OnComponentAdded;
+            m_registry.OnComponentRemoved -= OnComponentRemoved;
         }
 
         public override bool Equals(object? obj)

@@ -18,7 +18,7 @@ namespace Gambo.ECS.Tests
         public void EntityShouldBeAdded()
         {
             var entityA = registry.CreateEntity();
-            var entityB = registry.GetEntity(entityA.ID);
+            var entityB = registry.GetEntity(entityA.Id);
 
             Assert.AreEqual(1, registry.EntitiesCount);
             Assert.AreEqual(entityB, entityA);
@@ -30,7 +30,7 @@ namespace Gambo.ECS.Tests
             var entityA = registry.CreateEntity();
             registry.RemoveEntity(entityA);
 
-            var removedEntity = registry.GetEntity(entityA.ID);
+            var removedEntity = registry.GetEntity(entityA.Id);
 
             Assert.AreEqual(0, registry.EntitiesCount);
             Assert.IsNull(removedEntity);

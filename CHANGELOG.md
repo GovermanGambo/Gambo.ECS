@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### Version 0.4.3 - 2021-07-28
+ - Exposed ServiceProvider property on EcsContext
+ - Added method HasComponent<T>(EcsEntity entity) to EcsRegistry
+ - Added method HasEntity(int id) to EcsRegistry
+
 ### Version 0.4.2 - 2021-07-26
  - Changed AddComponent to work without type parameters.
 

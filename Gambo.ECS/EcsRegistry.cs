@@ -7,26 +7,26 @@ namespace Gambo.ECS
 {
     public class EcsRegistry
     {
-        private static int nextRegistryID;
-        private readonly Dictionary<EcsEntity, HashSet<object>> components;
-        private readonly HashSet<EcsEntity> entities;
+        private static int m_nextRegistryId;
+        private readonly Dictionary<EcsEntity, HashSet<object>> m_components;
+        private readonly HashSet<EcsEntity> m_entities;
 
-        private readonly int id;
+        private readonly int m_id;
 
-        private int nextEntityID;
+        private int m_nextEntityId;
 
         public EcsRegistry()
         {
-            id = nextRegistryID;
-            nextRegistryID++;
-            entities = new HashSet<EcsEntity>();
-            components = new Dictionary<EcsEntity, HashSet<object>>();
+            m_id = m_nextRegistryId;
+            m_nextRegistryId++;
+            m_entities = new HashSet<EcsEntity>();
+            m_components = new Dictionary<EcsEntity, HashSet<object>>();
         }
 
-        public int EntitiesCount => entities.Count;
+        public int EntitiesCount => m_entities.Count;
 
         public ReadOnlyDictionary<EcsEntity, HashSet<object>> Components =>
-            new(components);
+            new(m_components);
 
         public event EventHandler<EntityEventArgs> OnEntityAdded;
         public event EventHandler<EntityEventArgs> OnEntityRemoved;
@@ -36,8 +36,8 @@ namespace Gambo.ECS
 
         public EcsEntity GetEntity(int entityID)
         {
-            foreach (var entity in entities)
-                if (entity.ID == entityID)
+            foreach (var entity in m_entities)
+                if (entity.Id == entityID)
                     return entity;
 
             return null;
@@ -45,9 +45,9 @@ namespace Gambo.ECS
 
         public EcsEntity CreateEntity()
         {
-            var entity = new EcsEntity(nextEntityID, this);
-            entities.Add(entity);
-            nextEntityID++;
+            var entity = new EcsEntity(m_nextEntityId, this);
+            m_entities.Add(entity);
+            m_nextEntityId++;
 
             OnEntityAdded?.Invoke(this, new EntityEventArgs(entity));
 
@@ -56,7 +56,7 @@ namespace Gambo.ECS
 
         public bool AddEntity(EcsEntity entity)
         {
-            var added = entities.Add(entity);
+            var added = m_entities.Add(entity);
 
             if (added) OnEntityAdded?.Invoke(this, new EntityEventArgs(entity));
 
@@ -65,9 +65,9 @@ namespace Gambo.ECS
 
         public bool RemoveEntity(EcsEntity entity, bool permanent = false)
         {
-            var removed = entities.Remove(entity);
+            var removed = m_entities.Remove(entity);
 
-            if (permanent) components.Remove(entity);
+            if (permanent) m_components.Remove(entity);
 
             if (removed) OnEntityRemoved?.Invoke(this, new EntityEventArgs(entity));
 
@@ -80,9 +80,9 @@ namespace Gambo.ECS
 
             var component = Activator.CreateInstance(componentType, args);
 
-            if (!components.ContainsKey(entity)) components.Add(entity, new HashSet<object>());
+            if (!m_components.ContainsKey(entity)) m_components.Add(entity, new HashSet<object>());
 
-            var componentsInEntity = components[entity];
+            var componentsInEntity = m_components[entity];
 
             var attributes = Attribute.GetCustomAttributes(componentType);
             if (attributes.Any(a => a is UniqueAttribute))
@@ -102,9 +102,9 @@ namespace Gambo.ECS
 
         public void RemoveComponent<T>(EcsEntity entity) where T : class
         {
-            if (!components.ContainsKey(entity)) return;
+            if (!m_components.ContainsKey(entity)) return;
 
-            var entityComponents = components[entity];
+            var entityComponents = m_components[entity];
             for (var i = 0; i < entityComponents.Count; i++)
             {
                 var component = entityComponents.ElementAt(i);
@@ -121,12 +121,12 @@ namespace Gambo.ECS
         {
             AssertEntity(entity);
 
-            return components.ContainsKey(entity) ? components[entity] : new HashSet<object>();
+            return m_components.ContainsKey(entity) ? m_components[entity] : new HashSet<object>();
         }
 
         public IEnumerable<TComponent> GetComponentsOfType<TComponent>() where TComponent : class
         {
-            var componentsByType = components
+            var componentsByType = m_components
                 .Values
                 .SelectMany(x => x)
                 .Where(c => c.GetType() == typeof(TComponent))
@@ -139,9 +139,9 @@ namespace Gambo.ECS
         {
             AssertEntity(entity);
 
-            if (!components.ContainsKey(entity)) return default;
+            if (!m_components.ContainsKey(entity)) return default;
 
-            var componentsInEntity = components[entity];
+            var componentsInEntity = m_components[entity];
             foreach (var component in componentsInEntity)
                 if (component.GetType() == typeof(T))
                     return (T) component;
@@ -158,18 +158,18 @@ namespace Gambo.ECS
 
         private bool Equals(EcsRegistry other)
         {
-            return id == other.id && Equals(entities, other.entities) && Equals(components, other.components);
+            return m_id == other.m_id && Equals(m_entities, other.m_entities) && Equals(m_components, other.m_components);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(id, entities, components);
+            return HashCode.Combine(m_id, m_entities, m_components);
         }
 
         private void AssertEntity(EcsEntity entity)
         {
-            if (!entities.Contains(entity))
-                throw new ArgumentException($"Entity with id {entity.ID} was not found in the registry.");
+            if (!m_entities.Contains(entity))
+                throw new ArgumentException($"Entity with id {entity.Id} was not found in the registry.");
         }
     }
 

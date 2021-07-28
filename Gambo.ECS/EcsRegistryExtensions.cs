@@ -1,14 +1,70 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Gambo.ECS
 {
     public static class EcsRegistryExtensions
     {
+        /// <summary>
+        ///     Adds an instance of the specified Component type to the specified entity.
+        /// </summary>
+        /// <param name="registry"></param>
+        /// <param name="entity"></param>
+        /// <param name="args"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         public static T AddComponent<T>(this EcsRegistry registry, EcsEntity entity, params object[] args) where T : class
         {
             object component = registry.AddComponent(typeof(T), entity, args);
             return component as T;
+        }
+        
+        /// <summary>
+        ///     Returns all components of a specified type on the entity
+        /// </summary>
+        /// <param name="registry"></param>
+        /// <param name="entity"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static IEnumerable<T> GetComponents<T>(this EcsRegistry registry, EcsEntity entity) where T : class
+        {
+            if (!registry.Components.ContainsKey(entity))
+            {
+                throw new ArgumentException($"Entity with id {entity.Id} was not found in the registry.");
+            }
+            
+            var components = registry.Components[entity]
+                .Where(c => c.GetType() == typeof(T));
+
+            return components as IEnumerable<T>;
+        }
+
+        /// <summary>
+        ///     Checks if the specified entity has the specified type of component
+        /// </summary>
+        /// <param name="registry"></param>
+        /// <param name="entity"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool HasComponent<T>(this EcsRegistry registry, EcsEntity entity) where T : class
+        {
+            object component = registry.GetComponent<T>(entity);
+
+            return component != null;
+        }
+
+        public static bool HasEntity(this EcsRegistry registry, int id)
+        {
+            var entity = registry.GetEntity(id);
+
+            return entity != null;
+        }
+
+        public static bool HasEntity(this EcsRegistry registry, EcsEntity entity)
+        {
+            return registry.HasEntity(entity.Id);
         }
         
         public static IEnumerable<(T1, T2)> View<T1, T2>(this EcsRegistry registry)
