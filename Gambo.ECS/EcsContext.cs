@@ -7,17 +7,18 @@ namespace Gambo.ECS
 {
     public class EcsContext
     {
-        private readonly HashSet<EcsSystem> systems;
+        private HashSet<EcsSystem> m_systems = new();
 
         internal EcsContext()
         {
             Registry = new EcsRegistry();
-            systems = new HashSet<EcsSystem>();
         }
 
         public EcsRegistry Registry { get; internal set; }
-        public ReadOnlyCollection<EcsSystem> Systems => new(systems.ToList());
-        internal IServiceProvider ServiceProvider { get; set; }
+
+        public IServiceProvider ServiceProvider { get; set; }
+
+        public ReadOnlyCollection<EcsSystem> Systems => new(m_systems.ToList());
 
         /// <summary>
         /// Adds a system to the context, with the specified constructor parameters.
@@ -75,17 +76,17 @@ namespace Gambo.ECS
 
         public bool RemoveSystem<TSystem>() where TSystem : EcsSystem
         {
-            var system = systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
+            var system = m_systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
 
             if (system == null) return false;
 
             system.Enabled = false;
-            return systems.Remove(system);
+            return m_systems.Remove(system);
         }
 
         public TSystem GetSystem<TSystem>() where TSystem : EcsSystem
         {
-            var system = systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
+            var system = m_systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
 
             return system as TSystem;
         }
@@ -101,9 +102,14 @@ namespace Gambo.ECS
 
         private void AddSystem(EcsSystem system)
         {
+            if (m_systems == null)
+            {
+                m_systems = new HashSet<EcsSystem>();
+            }
+            
             system.Registry = Registry;
             system.Enabled = true;
-            systems.Add(system);
+            m_systems.Add(system);
         }
     }
 }

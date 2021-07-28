@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
