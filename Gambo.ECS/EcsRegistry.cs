@@ -8,7 +8,7 @@ namespace Gambo.ECS
     public class EcsRegistry
     {
         private static int m_nextRegistryId;
-        private readonly Dictionary<EcsEntity, HashSet<object>> m_components;
+        private readonly Dictionary<EcsEntity, List<object>> m_components;
         private readonly HashSet<EcsEntity> m_entities;
 
         private readonly int m_id;
@@ -20,12 +20,12 @@ namespace Gambo.ECS
             m_id = m_nextRegistryId;
             m_nextRegistryId++;
             m_entities = new HashSet<EcsEntity>();
-            m_components = new Dictionary<EcsEntity, HashSet<object>>();
+            m_components = new Dictionary<EcsEntity, List<object>>();
         }
 
         public int EntitiesCount => m_entities.Count;
 
-        public ReadOnlyDictionary<EcsEntity, HashSet<object>> Components =>
+        public ReadOnlyDictionary<EcsEntity, List<object>> Components =>
             new(m_components);
 
         public event EventHandler<EntityEventArgs> OnEntityAdded;
@@ -77,10 +77,17 @@ namespace Gambo.ECS
         public object AddComponent(Type componentType, EcsEntity entity, params object[] args)
         {
             AssertEntity(entity);
+            
+            AssertComponentType(componentType);
 
-            var component = Activator.CreateInstance(componentType, args);
+            object? component = Activator.CreateInstance(componentType, args);
 
-            if (!m_components.ContainsKey(entity)) m_components.Add(entity, new HashSet<object>());
+            if (component == null)
+            {
+                throw new ArgumentException($"Unable to add component of type {componentType}");
+            }
+
+            if (!m_components.ContainsKey(entity)) m_components.Add(entity, new List<object>());
 
             var componentsInEntity = m_components[entity];
 
@@ -100,7 +107,7 @@ namespace Gambo.ECS
             return component;
         }
 
-        public void RemoveComponent<T>(EcsEntity entity) where T : class
+        public void RemoveComponent<T>(EcsEntity entity) where T : struct
         {
             if (!m_components.ContainsKey(entity)) return;
 
@@ -117,14 +124,14 @@ namespace Gambo.ECS
             }
         }
 
-        public HashSet<object> GetComponents(EcsEntity entity)
+        public List<object> GetComponents(EcsEntity entity)
         {
             AssertEntity(entity);
 
-            return m_components.ContainsKey(entity) ? m_components[entity] : new HashSet<object>();
+            return m_components.ContainsKey(entity) ? m_components[entity] : new List<object>();
         }
 
-        public IEnumerable<TComponent> GetComponentsOfType<TComponent>() where TComponent : class
+        public IEnumerable<TComponent> GetComponentsOfType<TComponent>() where TComponent : struct
         {
             var componentsByType = m_components
                 .Values
@@ -135,18 +142,36 @@ namespace Gambo.ECS
             return componentsByType;
         }
 
-        public T GetComponent<T>(EcsEntity entity) where T : class
+        public T? GetComponent<T>(EcsEntity entity) where T : struct
         {
             AssertEntity(entity);
 
-            if (!m_components.ContainsKey(entity)) return default;
+            if (!m_components.ContainsKey(entity)) return null;
 
             var componentsInEntity = m_components[entity];
             foreach (var component in componentsInEntity)
                 if (component.GetType() == typeof(T))
                     return (T) component;
 
-            return default;
+            return null;
+        }
+
+        public void ReplaceComponent(object component, EcsEntity entity)
+        {
+            AssertEntity(entity);
+            var componentType = component.GetType();
+            AssertComponentType(componentType);
+
+            int componentIndex = m_components[entity].Select(x => x.GetType()).ToList().IndexOf(componentType);
+
+            if (componentIndex < 0)
+            {
+                AddComponent(componentType, entity);
+            }
+            else
+            {
+                m_components[entity][componentIndex] = component;
+            }
         }
 
         public override bool Equals(object? obj)
@@ -170,6 +195,14 @@ namespace Gambo.ECS
         {
             if (!m_entities.Contains(entity))
                 throw new ArgumentException($"Entity with id {entity.Id} was not found in the registry.");
+        }
+
+        private static void AssertComponentType(Type componentType)
+        {
+            bool isStruct = componentType.IsValueType && !componentType.IsEnum;
+
+            if (!isStruct)
+                throw new ArgumentException($"Type {componentType} must be a struct to be registered as a component!");
         }
     }
 

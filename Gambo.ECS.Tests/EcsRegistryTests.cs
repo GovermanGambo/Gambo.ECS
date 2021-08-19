@@ -64,7 +64,7 @@ namespace Gambo.ECS.Tests
             registry.AddEntity(entity);
 
             Assert.AreEqual(1, registry.GetComponents(entity).Count);
-            Assert.AreEqual("MyTag", registry.GetComponent<TagComponent>(entity).Tag);
+            Assert.AreEqual("MyTag", registry.GetComponent<TagComponent>(entity)?.Tag);
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace Gambo.ECS.Tests
             
             Assert.AreEqual(typeof(TagComponent), component.GetType());
 
-            var tagComponent = component as TagComponent;
+            var tagComponent = (TagComponent)component;
             
             Assert.NotNull(tagComponent);
             Assert.AreEqual("Test", tagComponent.Tag);
@@ -134,7 +134,7 @@ namespace Gambo.ECS.Tests
         }
 
         [Unique]
-        public class UniqueComponent
+        public struct UniqueComponent
         {
             
         }
@@ -192,6 +192,34 @@ namespace Gambo.ECS.Tests
             Assert.AreEqual(1, registry.GetComponents(entityA).Count);
             Assert.AreEqual(1, registry.GetComponents(entityB).Count);
             Assert.AreNotEqual(componentA.Tag, componentB.Tag);
+        }
+
+        [Test]
+        public void ComponentShouldNotBeUpdatedOnChange()
+        {
+            var entity = registry.CreateEntity();
+            var tagComponent = registry.AddComponent<TagComponent>(entity, "Entity");
+
+            tagComponent.Tag = "Not Entity";
+
+            var originalComponent = registry.GetComponent<TagComponent>(entity);
+            
+            Assert.AreNotEqual(tagComponent.Tag, originalComponent?.Tag);
+        }
+
+        [Test]
+        public void ComponentShouldBeReplaced()
+        {
+            var entity = registry.CreateEntity();
+            var tagComponent = registry.AddComponent<TagComponent>(entity, "Entity");
+
+            tagComponent.Tag = "Not Entity";
+            
+            registry.ReplaceComponent<TagComponent>(tagComponent, entity);
+
+            var originalComponent = registry.GetComponent<TagComponent>(entity);
+            
+            Assert.AreEqual(tagComponent.Tag, originalComponent?.Tag);
         }
 
         [Test]
@@ -296,22 +324,18 @@ namespace Gambo.ECS.Tests
             Assert.Null(result);
         }
 
-        private class TestComponent
+        private struct TestComponent
         {
         }
 
-        private class TagComponent
+        private struct TagComponent
         {
-            public TagComponent()
-            {
-            }
-
             public TagComponent(string tag)
             {
                 Tag = tag;
             }
 
-            public string Tag { get; }
+            public string Tag { get; set; } 
         }
     }
 }

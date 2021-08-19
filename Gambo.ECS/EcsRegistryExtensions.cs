@@ -14,10 +14,10 @@ namespace Gambo.ECS
         /// <param name="args"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T AddComponent<T>(this EcsRegistry registry, EcsEntity entity, params object[] args) where T : class
+        public static T AddComponent<T>(this EcsRegistry registry, EcsEntity entity, params object[] args) where T : struct
         {
             object component = registry.AddComponent(typeof(T), entity, args);
-            return component as T;
+            return (T)component;
         }
         
         /// <summary>
@@ -28,7 +28,7 @@ namespace Gambo.ECS
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public static IEnumerable<T> GetComponents<T>(this EcsRegistry registry, EcsEntity entity) where T : class
+        public static IEnumerable<T> GetComponents<T>(this EcsRegistry registry, EcsEntity entity) where T : struct
         {
             if (!registry.Components.ContainsKey(entity))
             {
@@ -48,7 +48,7 @@ namespace Gambo.ECS
         /// <param name="entity"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static bool HasComponent<T>(this EcsRegistry registry, EcsEntity entity) where T : class
+        public static bool HasComponent<T>(this EcsRegistry registry, EcsEntity entity) where T : struct
         {
             object component = registry.GetComponent<T>(entity);
 
@@ -66,10 +66,16 @@ namespace Gambo.ECS
         {
             return registry.HasEntity(entity.Id);
         }
+
+        public static void ReplaceComponent<T>(this EcsRegistry registry, T component, EcsEntity entity)
+            where T : struct
+        {
+            registry.ReplaceComponent(component, entity);
+        }
         
         public static IEnumerable<(T1, T2)> View<T1, T2>(this EcsRegistry registry)
-            where T1 : class
-            where T2 : class
+            where T1 : struct
+            where T2 : struct
         {
             var result = new List<(T1, T2)>();
 
@@ -77,8 +83,8 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                T1 componentA = null;
-                T2 componentB = null;
+                T1? componentA = null;
+                T2? componentB = null;
                 foreach (var component in components[entity])
                 {
                     switch (component)
@@ -94,16 +100,16 @@ namespace Gambo.ECS
 
                 if (componentA == null || componentB == null) continue;
 
-                result.Add((componentA, componentB));
+                result.Add((componentA.Value, componentB.Value));
             }
 
             return result;
         }
 
         public static IEnumerable<(T1, T2, T3)> View<T1, T2, T3>(this EcsRegistry registry)
-            where T1 : class
-            where T2 : class
-            where T3 : class
+            where T1 : struct
+            where T2 : struct
+            where T3 : struct
         {
             var result = new List<(T1, T2, T3)>();
 
@@ -111,9 +117,9 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                T1 componentA = null;
-                T2 componentB = null;
-                T3 componentC = null;
+                T1? componentA = null;
+                T2? componentB = null;
+                T3? componentC = null;
                 foreach (var component in components[entity])
                 {
                     switch (component)
@@ -132,17 +138,17 @@ namespace Gambo.ECS
 
                 if (componentA == null || componentB == null || componentC == null) continue;
 
-                result.Add((componentA, componentB, componentC));
+                result.Add((componentA.Value, componentB.Value, componentC.Value));
             }
 
             return result;
         }
 
         public static IEnumerable<(T1, T2, T3, T4)> View<T1, T2, T3, T4>(this EcsRegistry registry)
-            where T1 : class
-            where T2 : class
-            where T3 : class
-            where T4 : class
+            where T1 : struct
+            where T2 : struct
+            where T3 : struct
+            where T4 : struct
         {
             var result = new List<(T1, T2, T3, T4)>();
 
@@ -150,10 +156,10 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                T1 componentA = null;
-                T2 componentB = null;
-                T3 componentC = null;
-                T4 componentD = null;
+                T1? componentA = null;
+                T2? componentB = null;
+                T3? componentC = null;
+                T4? componentD = null;
                 foreach (var component in components[entity])
                 {
                     switch (component)
@@ -175,18 +181,18 @@ namespace Gambo.ECS
 
                 if (componentA == null || componentB == null || componentC == null || componentD == null) continue;
 
-                result.Add((componentA, componentB, componentC, componentD));
+                result.Add((componentA.Value, componentB.Value, componentC.Value, componentD.Value));
             }
 
             return result;
         }
 
         public static IEnumerable<(T1, T2, T3, T4, T5)> View<T1, T2, T3, T4, T5>(this EcsRegistry registry)
-            where T1 : class
-            where T2 : class
-            where T3 : class
-            where T4 : class
-            where T5 : class
+            where T1 : struct
+            where T2 : struct
+            where T3 : struct
+            where T4 : struct
+            where T5 : struct
         {
             var result = new List<(T1, T2, T3, T4, T5)>();
 
@@ -194,11 +200,11 @@ namespace Gambo.ECS
 
             foreach (var entity in components.Keys)
             {
-                T1 componentA = null;
-                T2 componentB = null;
-                T3 componentC = null;
-                T4 componentD = null;
-                T5 componentE = null;
+                T1? componentA = null;
+                T2? componentB = null;
+                T3? componentC = null;
+                T4? componentD = null;
+                T5? componentE = null;
                 foreach (var component in components[entity])
                 {
                     switch (component)
@@ -225,7 +231,7 @@ namespace Gambo.ECS
                     || componentE == null)
                     continue;
 
-                result.Add((componentA, componentB, componentC, componentD, componentE));
+                result.Add((componentA.Value, componentB.Value, componentC.Value, componentD.Value, componentE.Value));
             }
 
             return result;
@@ -237,14 +243,14 @@ namespace Gambo.ECS
         /// <param name="registry"></param>
         /// <typeparam name="T">The component's type</typeparam>
         /// <returns></returns>
-        public static T FindComponentOfType<T>(this EcsRegistry registry) where T : class
+        public static T? FindComponentOfType<T>(this EcsRegistry registry) where T : struct
         {
             object component = registry.Components
                 .Values
                 .SelectMany(x => x)
                 .FirstOrDefault(c => c.GetType() == typeof(T));
 
-            return component as T;
+            return component as T?;
         }
     }
 }
