@@ -7,7 +7,7 @@ namespace Gambo.ECS
 {
     public class EcsContext
     {
-        private HashSet<EcsSystem> m_systems = new();
+        private readonly HashSet<EcsSystem> m_systems = new();
 
         internal EcsContext()
         {
@@ -16,7 +16,7 @@ namespace Gambo.ECS
 
         public EcsRegistry Registry { get; internal set; }
 
-        public IServiceProvider ServiceProvider { get; set; }
+        public IServiceProvider? ServiceProvider { get; set; }
 
         public ReadOnlyCollection<EcsSystem> Systems => new(m_systems.ToList());
 
@@ -63,7 +63,7 @@ namespace Gambo.ECS
             for (int i = 0; i < parameters.Length; i++)
             {
                 var type = paramInfos[i].ParameterType;
-                object service = ServiceProvider.GetService(type);
+                object? service = ServiceProvider.GetService(type);
                 parameters[i] = service ?? throw new ArgumentException($"No service of type {type} was found in the registry!");
             }
 
@@ -84,7 +84,7 @@ namespace Gambo.ECS
             return m_systems.Remove(system);
         }
 
-        public TSystem GetSystem<TSystem>() where TSystem : EcsSystem
+        public TSystem? GetSystem<TSystem>() where TSystem : EcsSystem
         {
             var system = m_systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
 
@@ -93,7 +93,7 @@ namespace Gambo.ECS
 
         private TSystem CreateSystem<TSystem>(object[] parameters)
         {
-            var system = (TSystem)Activator.CreateInstance(typeof(TSystem), parameters);
+            var system = (TSystem?)Activator.CreateInstance(typeof(TSystem), parameters);
             if (system == null)
                 throw new ArgumentException($"No suitable constructor was found for system type {typeof(TSystem)}");
 
@@ -102,11 +102,6 @@ namespace Gambo.ECS
 
         private void AddSystem(EcsSystem system)
         {
-            if (m_systems == null)
-            {
-                m_systems = new HashSet<EcsSystem>();
-            }
-            
             system.Registry = Registry;
             system.Enabled = true;
             m_systems.Add(system);

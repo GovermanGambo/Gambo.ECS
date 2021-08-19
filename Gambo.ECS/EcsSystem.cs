@@ -5,7 +5,7 @@ namespace Gambo.ECS
     public abstract class EcsSystem
     {
         private bool m_enabled = true;
-        private EcsRegistry m_registry;
+        private EcsRegistry? m_registry;
 
         public bool Enabled
         {
@@ -21,7 +21,7 @@ namespace Gambo.ECS
             }
         }
 
-        public EcsRegistry Registry
+        public EcsRegistry? Registry
         {
             get => m_registry;
             set
@@ -44,8 +44,8 @@ namespace Gambo.ECS
 
         ~EcsSystem()
         {
-            m_registry.OnComponentAdded -= OnComponentAdded;
-            m_registry.OnComponentRemoved -= OnComponentRemoved;
+            m_registry!.OnComponentAdded -= OnComponentAdded;
+            m_registry!.OnComponentRemoved -= OnComponentRemoved;
         }
 
         public override bool Equals(object? obj)
@@ -73,11 +73,11 @@ namespace Gambo.ECS
         {
         }
 
-        protected virtual void OnComponentAdded(object sender, ComponentEventArgs e)
+        protected virtual void OnComponentAdded(object? sender, ComponentEventArgs e)
         {
         }
 
-        protected virtual void OnComponentRemoved(object sender, ComponentEventArgs e)
+        protected virtual void OnComponentRemoved(object? sender, ComponentEventArgs e)
         {
         }
 

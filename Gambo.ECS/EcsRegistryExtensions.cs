@@ -38,7 +38,7 @@ namespace Gambo.ECS
             var components = registry.Components[entity]
                 .Where(c => c.GetType() == typeof(T));
 
-            return components as IEnumerable<T>;
+            return components as IEnumerable<T> ?? new List<T>();
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Gambo.ECS
         /// <returns></returns>
         public static bool HasComponent<T>(this EcsRegistry registry, EcsEntity entity) where T : struct
         {
-            object component = registry.GetComponent<T>(entity);
+            object? component = registry.GetComponent<T>(entity);
 
             return component != null;
         }
@@ -59,7 +59,7 @@ namespace Gambo.ECS
         {
             var entity = registry.GetEntity(id);
 
-            return entity != null;
+            return entity is not null;
         }
 
         public static bool HasEntity(this EcsRegistry registry, EcsEntity entity)
@@ -245,7 +245,7 @@ namespace Gambo.ECS
         /// <returns></returns>
         public static T? FindComponentOfType<T>(this EcsRegistry registry) where T : struct
         {
-            object component = registry.Components
+            object? component = registry.Components
                 .Values
                 .SelectMany(x => x)
                 .FirstOrDefault(c => c.GetType() == typeof(T));

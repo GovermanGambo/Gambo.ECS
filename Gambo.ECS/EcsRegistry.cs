@@ -28,13 +28,13 @@ namespace Gambo.ECS
         public ReadOnlyDictionary<EcsEntity, List<object>> Components =>
             new(m_components);
 
-        public event EventHandler<EntityEventArgs> OnEntityAdded;
-        public event EventHandler<EntityEventArgs> OnEntityRemoved;
+        public event EventHandler<EntityEventArgs>? OnEntityAdded;
+        public event EventHandler<EntityEventArgs>? OnEntityRemoved;
 
-        public event EventHandler<ComponentEventArgs> OnComponentAdded;
-        public event EventHandler<ComponentEventArgs> OnComponentRemoved;
+        public event EventHandler<ComponentEventArgs>? OnComponentAdded;
+        public event EventHandler<ComponentEventArgs>? OnComponentRemoved;
 
-        public EcsEntity GetEntity(int entityID)
+        public EcsEntity? GetEntity(int entityID)
         {
             foreach (var entity in m_entities)
                 if (entity.Id == entityID)
