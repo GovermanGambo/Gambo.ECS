@@ -14,10 +14,19 @@ namespace Gambo.ECS
             Registry = new EcsRegistry();
         }
 
+        /// <summary>
+        ///     The registry bound to this context
+        /// </summary>
         public EcsRegistry Registry { get; internal set; }
 
+        /// <summary>
+        ///     The ServiceProvider used for service injection when creating systems
+        /// </summary>
         public IServiceProvider? ServiceProvider { get; set; }
 
+        /// <summary>
+        ///     The systems attached to this context
+        /// </summary>
         public ReadOnlyCollection<EcsSystem> Systems => new(m_systems.ToList());
 
         /// <summary>
@@ -74,6 +83,11 @@ namespace Gambo.ECS
             return system;
         }
 
+        /// <summary>
+        ///     Removes the specified system from the context
+        /// </summary>
+        /// <typeparam name="TSystem">Type of the system</typeparam>
+        /// <returns>True if system was removed, false if it was not found</returns>
         public bool RemoveSystem<TSystem>() where TSystem : EcsSystem
         {
             var system = m_systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
@@ -84,6 +98,11 @@ namespace Gambo.ECS
             return m_systems.Remove(system);
         }
 
+        /// <summary>
+        ///     Gets the system of the specified type from the system
+        /// </summary>
+        /// <typeparam name="TSystem">The system type</typeparam>
+        /// <returns>The system if it was found, null if not</returns>
         public TSystem? GetSystem<TSystem>() where TSystem : EcsSystem
         {
             var system = m_systems.FirstOrDefault(s => s.GetType() == typeof(TSystem));
@@ -91,7 +110,7 @@ namespace Gambo.ECS
             return system as TSystem;
         }
 
-        private TSystem CreateSystem<TSystem>(object[] parameters)
+        private static TSystem CreateSystem<TSystem>(object[] parameters)
         {
             var system = (TSystem?)Activator.CreateInstance(typeof(TSystem), parameters);
             if (system == null)

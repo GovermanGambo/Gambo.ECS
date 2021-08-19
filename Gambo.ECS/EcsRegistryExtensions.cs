@@ -55,6 +55,12 @@ namespace Gambo.ECS
             return component != null;
         }
 
+        /// <summary>
+        ///     Checks if the registry contains the specified entity
+        /// </summary>
+        /// <param name="registry">The registry to check</param>
+        /// <param name="id">The id of the entity</param>
+        /// <returns>True if the entity exists in the registry</returns>
         public static bool HasEntity(this EcsRegistry registry, int id)
         {
             var entity = registry.GetEntity(id);
@@ -62,11 +68,18 @@ namespace Gambo.ECS
             return entity is not null;
         }
 
+        /// <summary>
+        ///     Checks if the registry contains the specified entity
+        /// </summary>
+        /// <param name="registry">The registry to check</param>
+        /// <param name="entity">The entity to look for</param>
+        /// <returns>True if the entity exists in the registry</returns>
         public static bool HasEntity(this EcsRegistry registry, EcsEntity entity)
         {
             return registry.HasEntity(entity.Id);
         }
 
+        
         public static void ReplaceComponent<T>(this EcsRegistry registry, T component, EcsEntity entity)
             where T : struct
         {

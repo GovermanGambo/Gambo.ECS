@@ -2,9 +2,12 @@
 
 namespace Gambo.ECS
 {
+    /// <summary>
+    ///     Represents an entity in the Entity-Component-System
+    /// </summary>
     public class EcsEntity
     {
-        private readonly EcsRegistry m_owner;
+        private EcsRegistry m_owner;
 
         internal EcsEntity(int id, EcsRegistry owner)
         {
@@ -12,6 +15,9 @@ namespace Gambo.ECS
             m_owner = owner;
         }
 
+        /// <summary>
+        ///     The entity Id within the attached registry
+        /// </summary>
         public int Id { get; }
 
         public static bool operator ==(EcsEntity left, EcsEntity right)
@@ -39,6 +45,11 @@ namespace Gambo.ECS
         public override int GetHashCode()
         {
             return HashCode.Combine(Id, m_owner);
+        }
+
+        internal void SetOwner(EcsRegistry registry)
+        {
+            m_owner = registry;
         }
     }
 

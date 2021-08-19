@@ -38,48 +38,6 @@ namespace Gambo.ECS.Tests
         }
 
         [Test]
-        public void EntityShouldNotBeAddedIfAlreadyAdded()
-        {
-            var entity = registry.CreateEntity();
-            var added = registry.AddEntity(entity);
-            Assert.False(added);
-        }
-
-        [Test]
-        public void EntityShouldBeAddedIfRemoved()
-        {
-            var entity = registry.CreateEntity();
-            registry.RemoveEntity(entity);
-            var added = registry.AddEntity(entity);
-
-            Assert.True(added);
-        }
-
-        [Test]
-        public void EntityComponentsShouldPersistIfNotPermanent()
-        {
-            var entity = registry.CreateEntity();
-            registry.AddComponent<TagComponent>(entity, "MyTag");
-            registry.RemoveEntity(entity);
-            registry.AddEntity(entity);
-
-            Assert.AreEqual(1, registry.GetComponents(entity).Count);
-            Assert.AreEqual("MyTag", registry.GetComponent<TagComponent>(entity)?.Tag);
-        }
-
-        [Test]
-        public void EntityComponentsShouldNotPersistIfPermanent()
-        {
-            var entity = registry.CreateEntity();
-            var component = registry.AddComponent<TagComponent>(entity, "MyTag");
-            registry.RemoveEntity(entity, true);
-            registry.AddEntity(entity);
-
-            Assert.IsEmpty(registry.GetComponents(entity));
-            Assert.AreNotEqual(component, registry.GetComponent<TagComponent>(entity));
-        }
-
-        [Test]
         public void ComponentShouldNotBeAddedIfEntityNotExists()
         {
             var entity = registry.CreateEntity();
@@ -220,6 +178,40 @@ namespace Gambo.ECS.Tests
             var originalComponent = registry.GetComponent<TagComponent>(entity);
             
             Assert.AreEqual(tagComponent.Tag, originalComponent?.Tag);
+        }
+
+        [Test]
+        public void HasEntityShouldReturnTrue()
+        {
+            var entity = registry.CreateEntity();
+            
+            Assert.True(registry.HasEntity(entity));
+            Assert.True(registry.HasEntity(entity.Id));
+        }
+        
+        [Test]
+        public void HasEntityShouldReturnFalse()
+        {
+            var entity = registry.CreateEntity();
+            registry.RemoveEntity(entity, true);
+            
+            Assert.False(registry.HasEntity(entity));
+            Assert.False(registry.HasEntity(entity.Id));
+        }
+
+        [Test]
+        public void RegistryShouldNotBreakIdsOnRemoval()
+        {
+            var entityA = registry.CreateEntity();
+            var entityB = registry.CreateEntity();
+            var entityC = registry.CreateEntity();
+
+            registry.RemoveEntity(entityB);
+
+            var entityC2 = registry.GetEntity(entityC.Id);
+            
+            Assert.NotNull(entityC2);
+            Assert.AreEqual(entityC, entityC2);
         }
 
         [Test]

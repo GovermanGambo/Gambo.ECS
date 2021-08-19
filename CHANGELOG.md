@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### [WIP] Version 1.0.0
+ - Migrated component data type to structs
+ - Added method ReplaceComponent(object component, EcsEntity entity) to EcsRegistry
+
 ### Version 0.4.3 - 2021-07-28
  - Exposed ServiceProvider property on EcsContext
  - Added method HasComponent<T>(EcsEntity entity) to EcsRegistry
