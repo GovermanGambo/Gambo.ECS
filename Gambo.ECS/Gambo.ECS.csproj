@@ -12,7 +12,7 @@
         <PackageLicenseUrl>https://github.com/GovermanGambo/Gambo.ECS/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/GovermanGambo/Gambo.ECS</RepositoryUrl>
         <Nullable>enable</Nullable>
-        <PackageReleaseNotes>Fixed issue where you can't differentiate between adding systems with/without DI</PackageReleaseNotes>
+        <PackageReleaseNotes>Refactored components to be required to be of type struct</PackageReleaseNotes>
     </PropertyGroup>
 
 </Project>
