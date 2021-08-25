@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
  - Added method ReplaceComponent(object component, EcsEntity entity) to EcsRegistry
 ### Changed
  - Migrated component data type to structs
+ - Added the respective EcsEntity in the tuples returned by View<T...> 
 ### Removed
  - Removed AddEntity method
 

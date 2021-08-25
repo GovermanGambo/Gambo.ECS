@@ -265,10 +265,14 @@ namespace Gambo.ECS.Tests
             var tagComponentB = registry.AddComponent<TagComponent>(entityB, "TagB");
 
             var views = registry.View<TestComponent, TagComponent>().ToArray();
-            var (testA, tagA) = views[0];
-            var (testB, tagB) = views[1];
+            var (entityA2, testA, tagA) = views[0];
+            var (entityB2, testB, tagB) = views[1];
 
 
+            Assert.AreEqual(entityA, entityA2);
+            Assert.AreEqual(entityB, entityB2);
+            Assert.AreNotEqual(entityA, entityB2);
+            Assert.AreNotEqual(entityB, entityA2);
             Assert.AreEqual(testComponentA, testA);
             Assert.AreEqual(testComponentB, testB);
             Assert.AreEqual(tagComponentA, tagA);
@@ -287,9 +291,9 @@ namespace Gambo.ECS.Tests
             var views = registry.View<TestComponent, TagComponent>().ToArray();
 
             Assert.AreEqual(views.Length, 1);
-            var (testA, tagA) = views[0];
+            var (entityA2, testA, tagA) = views[0];
 
-
+            Assert.AreEqual(entityA, entityA2);
             Assert.AreEqual(testComponentA, testA);
             Assert.AreEqual(tagComponentA, tagA);
         }

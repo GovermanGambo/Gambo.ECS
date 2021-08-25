@@ -86,11 +86,11 @@ namespace Gambo.ECS
             registry.ReplaceComponent(component, entity);
         }
         
-        public static IEnumerable<(T1, T2)> View<T1, T2>(this EcsRegistry registry)
+        public static IEnumerable<(EcsEntity, T1, T2)> View<T1, T2>(this EcsRegistry registry)
             where T1 : struct
             where T2 : struct
         {
-            var result = new List<(T1, T2)>();
+            var result = new List<(EcsEntity, T1, T2)>();
 
             var components = registry.Components;
 
@@ -113,18 +113,18 @@ namespace Gambo.ECS
 
                 if (componentA == null || componentB == null) continue;
 
-                result.Add((componentA.Value, componentB.Value));
+                result.Add((entity, componentA.Value, componentB.Value));
             }
 
             return result;
         }
 
-        public static IEnumerable<(T1, T2, T3)> View<T1, T2, T3>(this EcsRegistry registry)
+        public static IEnumerable<(EcsEntity, T1, T2, T3)> View<T1, T2, T3>(this EcsRegistry registry)
             where T1 : struct
             where T2 : struct
             where T3 : struct
         {
-            var result = new List<(T1, T2, T3)>();
+            var result = new List<(EcsEntity, T1, T2, T3)>();
 
             var components = registry.Components;
 
@@ -151,19 +151,19 @@ namespace Gambo.ECS
 
                 if (componentA == null || componentB == null || componentC == null) continue;
 
-                result.Add((componentA.Value, componentB.Value, componentC.Value));
+                result.Add((entity, componentA.Value, componentB.Value, componentC.Value));
             }
 
             return result;
         }
 
-        public static IEnumerable<(T1, T2, T3, T4)> View<T1, T2, T3, T4>(this EcsRegistry registry)
+        public static IEnumerable<(EcsEntity, T1, T2, T3, T4)> View<T1, T2, T3, T4>(this EcsRegistry registry)
             where T1 : struct
             where T2 : struct
             where T3 : struct
             where T4 : struct
         {
-            var result = new List<(T1, T2, T3, T4)>();
+            var result = new List<(EcsEntity, T1, T2, T3, T4)>();
 
             var components = registry.Components;
 
@@ -194,20 +194,20 @@ namespace Gambo.ECS
 
                 if (componentA == null || componentB == null || componentC == null || componentD == null) continue;
 
-                result.Add((componentA.Value, componentB.Value, componentC.Value, componentD.Value));
+                result.Add((entity, componentA.Value, componentB.Value, componentC.Value, componentD.Value));
             }
 
             return result;
         }
 
-        public static IEnumerable<(T1, T2, T3, T4, T5)> View<T1, T2, T3, T4, T5>(this EcsRegistry registry)
+        public static IEnumerable<(EcsEntity, T1, T2, T3, T4, T5)> View<T1, T2, T3, T4, T5>(this EcsRegistry registry)
             where T1 : struct
             where T2 : struct
             where T3 : struct
             where T4 : struct
             where T5 : struct
         {
-            var result = new List<(T1, T2, T3, T4, T5)>();
+            var result = new List<(EcsEntity, T1, T2, T3, T4, T5)>();
 
             var components = registry.Components;
 
@@ -244,7 +244,7 @@ namespace Gambo.ECS
                     || componentE == null)
                     continue;
 
-                result.Add((componentA.Value, componentB.Value, componentC.Value, componentD.Value, componentE.Value));
+                result.Add((entity, componentA.Value, componentB.Value, componentC.Value, componentD.Value, componentE.Value));
             }
 
             return result;
