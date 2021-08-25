@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
         <LangVersion>9</LangVersion>
-        <PackageVersion>1.0.0-pre002</PackageVersion>
+        <PackageVersion>1.0.0-pre003</PackageVersion>
         <Title>Gambo.ECS</Title>
         <Company>Gambo</Company>
         <Authors>GovermanGambo</Authors>
