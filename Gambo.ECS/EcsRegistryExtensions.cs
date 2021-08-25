@@ -80,10 +80,11 @@ namespace Gambo.ECS
         }
 
         
-        public static void ReplaceComponent<T>(this EcsRegistry registry, T component, EcsEntity entity)
+        public static T? ReplaceComponent<T>(this EcsRegistry registry, T component, EcsEntity entity)
             where T : struct
         {
-            registry.ReplaceComponent(component, entity);
+            object? previousComponent = registry.ReplaceComponent(component, entity);
+            return (T?) previousComponent;
         }
         
         public static IEnumerable<(EcsEntity, T1, T2)> View<T1, T2>(this EcsRegistry registry)

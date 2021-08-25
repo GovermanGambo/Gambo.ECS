@@ -299,6 +299,54 @@ namespace Gambo.ECS.Tests
         }
 
         [Test]
+        public void ViewShouldReturnCorrectEntityAndHaveSuccessfulReplace()
+        {
+            var entity = registry.CreateEntity();
+            var tagComponent = registry.AddComponent<TagComponent>(entity, "Entity");
+            var testComponent = registry.AddComponent<TestComponent>(entity);
+
+            var (entityCopy, componentCopy, testComponentCopy) = registry.View<TagComponent, TestComponent>().ToArray()[0];
+            
+            Assert.AreEqual(entity, entityCopy);
+            Assert.AreEqual(tagComponent, componentCopy);
+            Assert.AreEqual(testComponent, testComponentCopy);
+
+            tagComponent.Tag = "My Entity";
+
+            registry.ReplaceComponent(tagComponent, entity);
+
+            var newComponent = registry.GetComponent<TagComponent>(entityCopy);
+            
+            Assert.NotNull(newComponent);
+            Assert.AreNotEqual(componentCopy, newComponent);
+            Assert.AreEqual(tagComponent, newComponent);
+        }
+
+        [Test]
+        public void ReplaceComponentShouldReturnPreviousComponent()
+        {
+            var entity = registry.CreateEntity();
+            var tagComponent = registry.AddComponent<TagComponent>(entity, "Entity");
+            var newTagComponent = new TagComponent("My Entity");
+
+            var previousComponent = registry.ReplaceComponent<TagComponent>(newTagComponent, entity);
+            
+            Assert.NotNull(previousComponent);
+            Assert.AreEqual(tagComponent, previousComponent);
+            Assert.AreNotEqual(newTagComponent, previousComponent);
+        }
+
+        [Test]
+        public void ReplaceComponentShouldReturnNullIfNotAlreadyAttached()
+        {
+            var entity = registry.CreateEntity();
+            var tagComponent = new TagComponent("Entity");
+            var previousComponent = registry.ReplaceComponent<TagComponent>(tagComponent, entity);
+            
+            Assert.Null(previousComponent);
+        }
+
+        [Test]
         public void FindComponentOfTypeShouldReturn1Component()
         {
             var entityA = registry.CreateEntity();

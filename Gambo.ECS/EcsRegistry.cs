@@ -218,22 +218,29 @@ namespace Gambo.ECS
         /// </summary>
         /// <param name="component">The component instance to replace. Type will be inferred from the instance</param>
         /// <param name="entity">The entity to manipulate</param>
-        public void ReplaceComponent(object component, EcsEntity entity)
+        public object? ReplaceComponent(object component, EcsEntity entity)
         {
             AssertEntity(entity);
             var componentType = component.GetType();
             AssertComponentType(componentType);
+
+            if (!m_components.ContainsKey(entity))
+            {
+                AddComponent(componentType, entity);
+                return null;
+            }
 
             int componentIndex = m_components[entity].Select(x => x.GetType()).ToList().IndexOf(componentType);
 
             if (componentIndex < 0)
             {
                 AddComponent(componentType, entity);
+                return null;
             }
-            else
-            {
-                m_components[entity][componentIndex] = component;
-            }
+
+            object previousComponent = m_components[entity][componentIndex];
+            m_components[entity][componentIndex] = component;
+            return previousComponent;
         }
 
         public override bool Equals(object? obj)
